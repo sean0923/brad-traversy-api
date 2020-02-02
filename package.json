@@ -8,6 +8,7 @@
     "webpack-watch": "webpack --watch --mode development",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"npm run webpack-watch\" \"nodemon dist/bundle.js\"",
+    "dev-1": "concurrently \"tsc --watch\" \"nodemon dist/\"",
     "custom": "tsc --watch",
     "start": "NODE_ENV=production node dist/bundle.js"
   },
