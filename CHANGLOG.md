@@ -1,3 +1,21 @@
+## 17 
+
+## 16 Middleware
+
+- make middlewares/loggers
+
+```ts
+export const logger: RequestHandler = (req, res, next) => {
+  console.log(`${req.method} ${req.protocol}:${req.get('host')} ${req.originalUrl}`);
+  next();
+};
+```
+
+--> DELETE http:localhost:5000 /api/v1/bootcamps/123
+
+- npm install morgan <-- logger middleware
+  --> DELETE /api/v1/bootcamps/123 200 2.689 ms - 25
+
 ## 15 Controllers
 
 - controls what happens at api endpoint
