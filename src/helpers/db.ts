@@ -8,5 +8,5 @@ export const connectDB = async () => {
     useFindAndModify: false,
   });
 
-  console.log(`MONGO: connect to ${conn.connection.host}`);
+  console.log(`MONGO: connect to ${conn.connection.host}`.underline.cyan.bold);
 };

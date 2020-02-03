@@ -1,3 +1,9 @@
+## 20 Add npm package `colors` to give color to command line logs
+
+```ts
+console.log(`MONGO: connect to ${conn.connection.host}`.underline.cyan.bold);
+```
+
 ## 19 Connect with Mongoose
 
 - src/index.ts
