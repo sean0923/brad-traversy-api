@@ -1,4 +1,46 @@
-## 17 
+## 19 Connect with Mongoose
+
+- src/index.ts
+
+When something wrong with mongoose promise or unhandledPromiseRejection in general,
+kill log error message and kill server
+
+```ts
+const server = app.listen(PORT, () => {
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+});
+
+process.on('unhandledRejection', (err: any) => {
+  console.log(`err: ${err.message}`);
+  server.close(() => process.exit(1));
+});
+```
+
+- connect to mongo with mongoose
+
+```ts
+export const connectDB = async () => {
+  const conn = await mongoose.connect(process.env.MONGO_URI as string, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  });
+
+  console.log(`MONGO: connect to ${conn.connection.host}`);
+};
+```
+
+## 18 MongoDB Atlas
+
+- DataAcess
+  -- add new user
+
+- NetworkAcess
+  -- Add IP Address
+  --- Add current IP Adress (my computer only)
+
+## 17 Postman setup
 
 ## 16 Middleware
 

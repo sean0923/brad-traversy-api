@@ -4,12 +4,16 @@ import morgan from 'morgan';
 
 //
 import { logger } from './middlewares/loggers';
+import { connectDB } from './helpers/db';
 
 // Route files
 import { bootcampsRouter } from './routes/bootcamps';
 
 // dotenv.config({ path: "../config/config.env" });
 dotenv.config({ path: './config/config.env' });
+
+// connect to mongo DB
+connectDB();
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -24,6 +28,11 @@ app.use('/api/v1/bootcamps', bootcampsRouter);
 
 const PORT = process.env.PORT || 6000;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+});
+
+process.on('unhandledRejection', (err: any) => {
+  console.log(`err: ${err.message}`);
+  server.close(() => process.exit(1));
 });
