@@ -1,3 +1,35 @@
+## 23 Get Bootcamps and Single Bootcamp by id
+
+- get bootcamps
+
+```ts
+export const getBootcamps: RequestHandler = async (req, res, next) => {
+  try {
+    const allBootcamps = await BootcampModel.find();
+    res.status(200).json({ sucess: true, data: allBootcamps });
+  } catch (error) {
+    res.status(400).json({ sucess: false, errMsg: error.errmsg });
+  }
+};
+```
+
+- get a single bootcamp
+  - need to handle case where bootcamp does not exist
+
+```ts
+export const getBootcamp: RequestHandler = async (req: Request, res, next) => {
+  try {
+    const singleBootcamp = await BootcampModel.findById(req.params.id);
+    if (!singleBootcamp) {
+      return res.status(400).json({ sucess: false, errMsg: 'bootcamp does not exsit' });
+    }
+    res.status(200).json({ sucess: true, data: singleBootcamp });
+  } catch (error) {
+    res.status(400).json({ sucess: false, errMsg: error.message });
+  }
+};
+```
+
 ## 22 Create Bootcamps
 
 - postman preset
