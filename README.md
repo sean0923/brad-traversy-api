@@ -1,3 +1,7 @@
+## 22 
+
+![alt text](./assets/postman-content-type-preset.png "Logo Title Text 1")
+
 ## 21 Add Bootcamp Model (and BootcampSchema)
 
 - to models/Bootcamp.ts
