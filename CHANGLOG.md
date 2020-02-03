@@ -1,3 +1,7 @@
+## 21 Add Bootcamp Model (and BootcampSchema)
+
+- to models/Bootcamp.ts
+
 ## 20 Add npm package `colors` to give color to command line logs
 
 ```ts
