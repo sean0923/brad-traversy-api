@@ -1,6 +1,28 @@
-## 22 
+## 22 Create Bootcamps
 
-![alt text](./assets/postman-content-type-preset.png "Logo Title Text 1")
+- postman preset
+
+  ![alt text](./assets/postman-content-type-preset.png 'content-type-preset')
+
+- !!! Express has built in body parser **finally** !!!
+
+```ts
+app.use(express.json());
+```
+
+- In models/Bootcamp.ts --> create bootcamp then send json back
+
+```ts
+export const createBootcamp: RequestHandler = async (req, res, next) => {
+  try {
+    const bootcamp = await BootcampModel.create(req.body);
+    // 201 for creation
+    res.status(201).json({ sucess: true, data: bootcamp });
+  } catch (error) {
+    res.status(400).json({ sucess: false, errMsg: error.errmsg });
+  }
+};
+```
 
 ## 21 Add Bootcamp Model (and BootcampSchema)
 

@@ -26,6 +26,7 @@ if (isDev) {
   app.use(morgan('dev'));
 }
 
+app.use(express.json());
 app.use('/api/v1/bootcamps', bootcampsRouter);
 
 const PORT = process.env.PORT || 6000;
