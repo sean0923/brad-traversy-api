@@ -39,7 +39,8 @@ export const getBootcamp: RequestHandler = async (req: Request, res, next) => {
     }
     res.status(200).json({ sucess: true, data: singleBootcamp });
   } catch (error) {
-    res.status(400).json({ sucess: false, errMsg: error.message });
+    // res.status(400).json({ sucess: false, errMsg: error.message });
+    next(error);
   }
 };
 

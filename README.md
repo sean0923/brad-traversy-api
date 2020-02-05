@@ -1,3 +1,37 @@
+## 25 error handler middleware
+
+- at controller catch pass error to next func
+
+```ts
+} catch (error) {
+  // res.status(400).json({ sucess: false, errMsg: error.message });
+  next(error);
+}
+```
+
+- define error handler middleware
+
+```ts
+export const errorHandler = (err, req, res: Response, next) => {
+  console.log(err.stack.red);
+
+  res.status(400).json({
+    success: false,
+    errMsg: err.message,
+  });
+};
+```
+
+- at index.ts
+- make sure errorHandler is placed after route
+
+```ts
+app.use(express.json());
+app.use('/api/v1/bootcamps', bootcampsRouter);
+// ! IMPORTANT ERR HANDLER MUST BE PLACED AFTER ROUTE STUFF
+app.use(errorHandler);
+```
+
 ## 24 Update and Delete
 
 - Update

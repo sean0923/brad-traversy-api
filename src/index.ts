@@ -1,11 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+
 import 'colors';
 // require('colors');
 
 //
 import { logger } from './middlewares/loggers';
+import { errorHandler } from './middlewares/error-handler';
 import { connectDB } from './helpers/db';
 
 // Route files
@@ -28,6 +30,8 @@ if (isDev) {
 
 app.use(express.json());
 app.use('/api/v1/bootcamps', bootcampsRouter);
+// ! IMPORTANT ERR HANDLER MUST BE PLACED AFTER ROUTE STUFF
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 6000;
 
