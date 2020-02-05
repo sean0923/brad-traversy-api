@@ -22,7 +22,7 @@ export const createBootcamp: RequestHandler = async (req, res, next) => {
 export const getBootcamps: RequestHandler = async (req, res, next) => {
   try {
     const allBootcamps = await BootcampModel.find();
-    res.status(200).json({ sucess: true, data: allBootcamps });
+    res.status(200).json({ sucess: true, count: allBootcamps.length, data: allBootcamps });
   } catch (error) {
     res.status(400).json({ sucess: false, errMsg: error.errmsg });
   }
