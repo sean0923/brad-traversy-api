@@ -47,14 +47,33 @@ export const getBootcamp: RequestHandler = async (req: Request, res, next) => {
 // @ desc     update bootcamp
 // @ route    PUT /api/v1/bootcamp/:id
 // @ access   Private
-export const updateBootcamp: RequestHandler = (req, res, next) => {
-  res.status(200).json({ msg: 'update bootcamp' });
+export const updateBootcamp: RequestHandler = async (req, res, next) => {
+  try {
+    const updatedBootcamp = await BootcampModel.findByIdAndUpdate(req.params.id, req.body, {
+      new: true, // without this it updates but return the not updated item
+      runValidators: true,
+    });
+    if (!updatedBootcamp) {
+      return res.status(400).json({ sucess: false, errMsg: 'bootcamp does not exsit' });
+    }
+    res.status(200).json({ sucess: true, data: updatedBootcamp });
+  } catch (error) {
+    res.status(400).json({ sucess: false, errMsg: error.message });
+  }
 };
 
 // * D
 // @ desc     delete bootcamp
 // @ route    DELETE /api/v1/bootcamp/:id
 // @ access   Private
-export const deleteBootcamp: RequestHandler = (req, res, next) => {
-  res.status(200).json({ msg: 'delete bootcamp' });
+export const deleteBootcamp: RequestHandler = async (req, res, next) => {
+  try {
+    const deletedBootcamp = await BootcampModel.findByIdAndDelete(req.params.id);
+    if (!deletedBootcamp) {
+      return res.status(400).json({ sucess: false, errMsg: 'bootcamp does not exsit' });
+    }
+    res.status(200).json({ sucess: true, data: deletedBootcamp });
+  } catch (error) {
+    res.status(400).json({ sucess: false, errMsg: error.message });
+  }
 };

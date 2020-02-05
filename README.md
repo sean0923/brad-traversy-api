@@ -1,3 +1,20 @@
+## 24 Update and Delete
+
+- Update
+
+```ts
+const updatedBootcamp = await BootcampModel.findByIdAndUpdate(req.params.id, req.body, {
+  new: true, // without this it updates but return the not updated item
+  runValidators: true,
+});
+```
+
+- Delete
+
+```ts
+const deletedBootcamp = await BootcampModel.findByIdAndDelete(req.params.id);
+```
+
 ## 23 Get Bootcamps and Single Bootcamp by id
 
 - get bootcamps
