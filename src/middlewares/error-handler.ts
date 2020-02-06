@@ -1,10 +1,11 @@
 import { Response } from 'express';
+import { ErrorResponse } from '../helpers/ErrorResponse';
 
-export const errorHandler = (err, req, res: Response, next) => {
-  console.log(err.stack.red);
+export const errorHandler = (err: ErrorResponse, req, res: Response, next) => {
+  console.log(err.stack?.red);
 
-  res.status(400).json({
+  res.status(err.statusCode).json({
     success: false,
-    errMsg: err.message,
+    errorMessage: err.message,
   });
 };

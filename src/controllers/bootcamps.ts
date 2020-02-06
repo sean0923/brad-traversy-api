@@ -1,5 +1,6 @@
 import { RequestHandler, Request } from 'express';
 import { BootcampModel } from '../models/Bootcamp';
+import { ErrorResponse } from '../helpers/ErrorResponse';
 
 // * C
 // @ desc     create new bootcamp
@@ -40,7 +41,7 @@ export const getBootcamp: RequestHandler = async (req: Request, res, next) => {
     res.status(200).json({ sucess: true, data: singleBootcamp });
   } catch (error) {
     // res.status(400).json({ sucess: false, errMsg: error.message });
-    next(error);
+    next(new ErrorResponse('Wrong format of bootcamp id', 404));
   }
 };
 

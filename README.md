@@ -1,3 +1,25 @@
+## ErrorResponse Class
+
+In controller, pass error to next function then next() function which takes flow to next middleware
+Next middleware takes that error then send resp with res.status(...).json(...)
+
+ErrorResponse Class is extending the error by
+
+```ts
+export class ErrorResponse extends Error {
+  statusCode: number;
+
+  constructor(message: string, statusCode: number) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
+```
+
+So next() function will take this ErrorResponse instance instead of just error.
+This way we have control over message and status code in neater way? 
+
+
 ## 25 error handler middleware
 
 - at controller catch pass error to next func
