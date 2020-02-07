@@ -1,3 +1,14 @@
+## 27 MongoDB Cast Err
+
+- not sure about handling err like this
+
+```ts
+// MongoDB bad _id format
+if (err.name === 'CastError') {
+  tempErr = new ErrorResponse(`Bootcamp not found with id of ${(err as any).value}`, 404);
+}
+```
+
 ## ErrorResponse Class
 
 In controller, pass error to next function then next() function which takes flow to next middleware
@@ -17,8 +28,7 @@ export class ErrorResponse extends Error {
 ```
 
 So next() function will take this ErrorResponse instance instead of just error.
-This way we have control over message and status code in neater way? 
-
+This way we have control over message and status code in neater way?
 
 ## 25 error handler middleware
 

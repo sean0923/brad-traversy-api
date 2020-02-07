@@ -41,7 +41,8 @@ export const getBootcamp: RequestHandler = async (req: Request, res, next) => {
     res.status(200).json({ sucess: true, data: singleBootcamp });
   } catch (error) {
     // res.status(400).json({ sucess: false, errMsg: error.message });
-    next(new ErrorResponse('Wrong format of bootcamp id', 404));
+    // next(new ErrorResponse('Wrong format of bootcamp id', 404));
+    next(error);
   }
 };
 
