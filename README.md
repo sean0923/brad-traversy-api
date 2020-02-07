@@ -1,4 +1,28 @@
-## 27 MongoDB Cast Err
+## 28 MongoDB duplicated key err, validation err
+
+There are many more keys in mongo err (value, code, etc)
+
+- dulicated key err
+
+```ts
+if (err.code === 11000 && err.keyValue) {
+  tempErr = new ErrorResponse(`Duplication Err "key: ${JSON.stringify(err.keyValue)}"`, 400);
+}
+```
+
+- validation err
+
+```ts
+if (err.name === 'ValidationError' && err.errors) {
+  const message = Object.values(err.errors)
+    .map((obj) => obj.message)
+    .join(', ');
+
+  tempErr = new ErrorResponse(message, 404);
+}
+```
+
+## 27 MongoDB Cast Err (invalid id)
 
 - not sure about handling err like this
 
