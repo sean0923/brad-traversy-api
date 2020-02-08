@@ -1,3 +1,39 @@
+## 29 Async Handler to reduce code (DRY)
+
+```ts
+try {
+  const allBootcamps = await BootcampModel.find();
+  res.status(200).json({ sucess: true, count: allBootcamps.length, data: allBootcamps });
+} catch (error) {
+  next(error);
+}
+```
+
+can be reduce to
+
+```ts
+const allBootcamps = await BootcampModel.find();
+res.status(200).json({ sucess: true, count: allBootcamps.length, data: allBootcamps });
+```
+
+by using
+
+```ts
+export const asyncHandler = (fn: RequestHandler) => (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  return Promise.resolve(fn(req, res, next)).catch((err) => next(err));
+};
+```
+
+need to wrap controller func with asyncHandler
+
+```ts
+
+```
+
 ## 28 MongoDB duplicated key err, validation err
 
 There are many more keys in mongo err (value, code, etc)
