@@ -1,4 +1,39 @@
 import mongoose from 'mongoose';
+import slugify from 'slugify';
+
+type Carrer =
+  | 'WebDeveloper'
+  | 'Mobile Development'
+  | 'UI/UX'
+  | 'Data Science'
+  | 'Business'
+  | 'Other';
+
+interface Bootcamp extends mongoose.Document {
+  name: string;
+  slug: string;
+  description: string;
+  website: string;
+  phone: string;
+  email: string;
+  address: string;
+  location: {
+    // GeoJSON Point
+    type: string;
+    coordinates: number[];
+    formattedAddress: string;
+    street: string;
+    city: string;
+    state: string;
+    zipcode: string;
+    country: string;
+  };
+  careers: Carrer[];
+  averageRating: number;
+  averageCost: number;
+  photo: string;
+  createdAt: Date;
+}
 
 const BootcampSchema = new mongoose.Schema({
   name: {
@@ -70,6 +105,10 @@ const BootcampSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+});
+
+BootcampSchema.pre<Bootcamp>('save', function() {
+  this.slug;
 });
 
 export const BootcampModel = mongoose.model('Bootcamp', BootcampSchema);

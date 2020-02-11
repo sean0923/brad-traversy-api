@@ -1,3 +1,7 @@
+## 30. Mongoose Middleware with Slugify
+
+npm install slugify
+
 ## 29 Async Handler to reduce code (DRY)
 
 ```ts
@@ -31,7 +35,6 @@ export const asyncHandler = (fn: RequestHandler) => (
 need to wrap controller func with asyncHandler
 
 ```ts
-
 ```
 
 ## 28 MongoDB duplicated key err, validation err
