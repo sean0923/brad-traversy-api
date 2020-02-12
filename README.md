@@ -2,6 +2,15 @@
 
 npm install slugify
 
+Before 'save' slugify the name for front-end url
+
+```ts
+BootcampSchema.pre<Bootcamp>('save', function(next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
+```
+
 ## 29 Async Handler to reduce code (DRY)
 
 ```ts
