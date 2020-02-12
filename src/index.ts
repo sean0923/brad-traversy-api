@@ -3,7 +3,9 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 
 import 'colors';
-// require('colors');
+
+// this need to be invoked early
+dotenv.config({ path: './config/config.env' });
 
 //
 import { logger } from './middlewares/loggers';
@@ -12,9 +14,6 @@ import { connectDB } from './helpers/db';
 
 // Route files
 import { bootcampsRouter } from './routes/bootcamps';
-
-// dotenv.config({ path: "../config/config.env" });
-dotenv.config({ path: './config/config.env' });
 
 // connect to mongo DB
 connectDB();

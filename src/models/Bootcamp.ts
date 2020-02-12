@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import slugify from 'slugify';
+import { geocode } from '../helpers/geocode';
 
 type Carrer =
   | 'WebDeveloper'
@@ -16,10 +17,10 @@ interface Bootcamp extends mongoose.Document {
   website: string;
   phone: string;
   email: string;
-  address: string;
+  address: undefined | string;
   location: {
     // GeoJSON Point
-    type: string;
+    type: 'Point';
     coordinates: number[];
     formattedAddress: string;
     street: string;
@@ -107,8 +108,33 @@ const BootcampSchema = new mongoose.Schema({
   },
 });
 
+// slugify name
 BootcampSchema.pre<Bootcamp>('save', function(next) {
   this.slug = slugify(this.name, { lower: true });
+  next();
+});
+
+// save location and remove address
+// address --> geocdoe --> location
+BootcampSchema.pre<Bootcamp>('save', async function(next) {
+  if (this.address) {
+    const location = await geocode.geocode(this.address);
+    const firstLocation = location[0];
+
+    this.location = {
+      type: 'Point',
+      coordinates: [firstLocation.longitude as number, firstLocation.latitude as number],
+      city: firstLocation.city as string,
+      country: firstLocation.countryCode as string,
+      formattedAddress: firstLocation.formattedAddress as string,
+      state: firstLocation.stateCode as string,
+      street: firstLocation.streetName as string,
+      zipcode: firstLocation.zipcode as string,
+    };
+  }
+
+  // Do not save adress in DB
+  this.address = undefined;
   next();
 });
 

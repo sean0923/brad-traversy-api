@@ -1,3 +1,53 @@
+## 31. GeoCode Related
+
+- hmm ... does not handle err case ... what if address is not correct ?
+--> just error out becuase of error handler
+
+npm install node-geocoder
+
+initialize node-geocoder with options
+
+```ts
+import NodeGeocoder from 'node-geocoder';
+
+var options = {
+  provider: process.env.GEO_CODE_PROVIDER,
+
+  // Optional depending on the providers
+  httpAdapter: 'https', // Default
+  apiKey: process.env.GEO_CODE_API_KEY, // for Mapquest, OpenCage, Google Premier
+  formatter: null, // 'gpx', 'string', ...
+};
+
+export const geocode = NodeGeocoder(options as any);
+```
+
+```ts
+// save location and remove address
+// address --> geocdoe --> location
+BootcampSchema.pre<Bootcamp>('save', async function(next) {
+  if (this.address) {
+    const location = await geocode.geocode(this.address);
+    const firstLocation = location[0];
+
+    this.location = {
+      type: 'Point',
+      coordinates: [firstLocation.longitude as number, firstLocation.latitude as number],
+      city: firstLocation.city as string,
+      country: firstLocation.countryCode as string,
+      formattedAddress: firstLocation.formattedAddress as string,
+      state: firstLocation.stateCode as string,
+      street: firstLocation.streetName as string,
+      zipcode: firstLocation.zipcode as string,
+    };
+  }
+
+  // Do not save adress in DB
+  this.address = undefined;
+  next();
+});
+```
+
 ## 30. Mongoose Middleware with Slugify
 
 npm install slugify
