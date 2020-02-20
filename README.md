@@ -1,7 +1,10 @@
+## 32. Seeding Database Progrmatically
+
+
 ## 31. GeoCode Related
 
 - hmm ... does not handle err case ... what if address is not correct ?
---> just error out becuase of error handler
+  --> just error out becuase of error handler
 
 npm install node-geocoder
 
