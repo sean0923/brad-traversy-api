@@ -1,5 +1,36 @@
+## 33. Get bootcamps within radius
+
+```ts
+const _getBootcampsWithinRadius: RequestHandler = async (req, res, next) => {
+  const { zipcode, distance } = req.params;
+  const location = await geocode.geocode(zipcode);
+  const lng = location[0].longitude;
+  const lat = location[0].latitude;
+
+  // If you use longitude and latitude, specify longitude first.
+  const earthRadiusInMiles = 3693.2;
+  const radius = parseFloat(distance) / earthRadiusInMiles;
+  const bootcamps = await BootcampModel.find({
+    // https://docs.mongodb.com/manual/reference/operator/query/centerSphere/
+    // location: { $geoWithin: { $centerSphere: [[-88, 30], 10 / 3963.2] } },
+    location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
+  });
+
+  res.status(200).json({ sucess: true, count: bootcamps.length, data: bootcamps });
+};
+```
+
 ## 32. Seeding Database Progrmatically
 
+Really need to invoke dotenv early, even before import
+
+```ts
+// this need to be invoked early
+dotenv.config({ path: './config/config.env' });
+
+import { BootcampModel } from '../models/Bootcamp';
+import { connectDB } from '../helpers/db';
+```
 
 ## 31. GeoCode Related
 

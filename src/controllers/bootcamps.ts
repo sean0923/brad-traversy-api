@@ -1,7 +1,8 @@
 import { RequestHandler, Request } from 'express';
 import { BootcampModel } from '../models/Bootcamp';
-import { ErrorResponse } from '../helpers/ErrorResponse';
+// import { ErrorResponse } from '../helpers/ErrorResponse';
 import { asyncHandler } from '../middlewares/async-handler';
+import { geocode } from '../helpers/geocode';
 
 // * C
 // @ desc     create new bootcamp
@@ -64,3 +65,26 @@ const _deleteBootcamp: RequestHandler = async (req, res, next) => {
   res.status(200).json({ sucess: true, data: deletedBootcamp });
 };
 export const deleteBootcamp = asyncHandler(_deleteBootcamp);
+
+// *
+// @ desc     get bootcamp within certain radius
+// @ route    GET /api/v1/bootcamp/radius/:zipcode/:distance
+// @ access   Private
+const _getBootcampsWithinRadius: RequestHandler = async (req, res, next) => {
+  const { zipcode, distance } = req.params;
+  const location = await geocode.geocode(zipcode);
+  const lng = location[0].longitude;
+  const lat = location[0].latitude;
+
+  // If you use longitude and latitude, specify longitude first.
+  const earthRadiusInMiles = 3693.2;
+  const radius = parseFloat(distance) / earthRadiusInMiles;
+  const bootcamps = await BootcampModel.find({
+    // https://docs.mongodb.com/manual/reference/operator/query/centerSphere/
+    // location: { $geoWithin: { $centerSphere: [[-88, 30], 10 / 3963.2] } },
+    location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
+  });
+
+  res.status(200).json({ sucess: true, count: bootcamps.length, data: bootcamps });
+};
+export const getBootcampsWithinRadius = asyncHandler(_getBootcampsWithinRadius);
