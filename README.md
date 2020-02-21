@@ -1,3 +1,26 @@
+## 36. Add pagination
+
+```ts
+// pagination
+const pagination: any = {};
+const page = req.query.page ? parseInt(req.query.page) : 1;
+const limit = req.query.limit ? parseInt(req.query.limit) : 25;
+const startIdx = (page - 1) * limit;
+const endIdx = page * limit;
+
+const total = await BootcampModel.countDocuments();
+
+if (endIdx < total) {
+  pagination.next = { page: page + 1, limit };
+}
+
+if (startIdx > 0) {
+  pagination.prev = { page: page - 1, limit };
+}
+
+query = query.skip(startIdx).limit(limit);
+```
+
 ## 35. Building up query with sort and select functionality
 
 - remove select and sort from original query str
@@ -23,7 +46,7 @@ if (req.query.sort) {
 const allBootcamps = await query.exec();
 ```
 
-- forgot sort to be default with createdAt so 
+- forgot sort to be default with createdAt so
 
 ```ts
 if (req.query.sort) {
