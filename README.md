@@ -1,3 +1,28 @@
+## 35. Building up query with sort and select functionality
+
+- remove select and sort from original query str
+- then build up query with select and sort
+
+```ts
+const keysToBeDeletedFromOriginalQueryStr = ['select', 'sort'];
+
+keysToBeDeletedFromOriginalQueryStr.forEach((key) => delete modifiedQuery[key]);
+
+let query = BootcampModel.find(modifiedQuery);
+
+if (req.query.select) {
+  const selectBy = req.query.select.split(',').join(' ');
+  query = query.select(selectBy);
+}
+
+if (req.query.sort) {
+  const sortBy = req.query.sort.split(',').join(' ');
+  query = query.sort(sortBy);
+}
+
+const allBootcamps = await query.exec();
+```
+
 ## 34. Advanced filtering =,gte,let,in ...
 
 ```ts

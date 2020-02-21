@@ -22,7 +22,25 @@ const _getBootcamps: RequestHandler = async (req, res, next) => {
   const queryStr = JSON.stringify(req.query);
   const queryStrWith$Sign = queryStr.replace(/\b(lt|gte|lte|gt|in)\b/g, (match) => '$' + match);
   const modifiedQuery = JSON.parse(queryStrWith$Sign);
-  const allBootcamps = await BootcampModel.find(modifiedQuery);
+
+  const keysToBeDeletedFromOriginalQueryStr = ['select', 'sort'];
+
+  keysToBeDeletedFromOriginalQueryStr.forEach((key) => delete modifiedQuery[key]);
+
+  let query = BootcampModel.find(modifiedQuery);
+
+  if (req.query.select) {
+    const selectBy = req.query.select.split(',').join(' ');
+    query = query.select(selectBy);
+  }
+
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(',').join(' ');
+    query = query.sort(sortBy);
+  }
+
+  const allBootcamps = await query.exec();
+
   res.status(200).json({ sucess: true, count: allBootcamps.length, data: allBootcamps });
 };
 export const getBootcamps = asyncHandler(_getBootcamps);
