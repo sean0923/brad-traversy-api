@@ -37,6 +37,9 @@ const _getBootcamps: RequestHandler = async (req, res, next) => {
   if (req.query.sort) {
     const sortBy = req.query.sort.split(',').join(' ');
     query = query.sort(sortBy);
+  } else {
+    query = query.sort('createdAt');
+  }
   }
 
   const allBootcamps = await query.exec();

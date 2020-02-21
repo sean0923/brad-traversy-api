@@ -23,6 +23,17 @@ if (req.query.sort) {
 const allBootcamps = await query.exec();
 ```
 
+- forgot sort to be default with createdAt so 
+
+```ts
+if (req.query.sort) {
+  const sortBy = req.query.sort.split(',').join(' ');
+  query = query.sort(sortBy);
+} else {
+  query = query.sort('createdAt');
+}
+```
+
 ## 34. Advanced filtering =,gte,let,in ...
 
 ```ts
