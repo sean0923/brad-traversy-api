@@ -19,7 +19,10 @@ export const createBootcamp = asyncHandler(_createBootcamp);
 // @ route    GET /api/v1/bootcamps
 // @ access   Public
 const _getBootcamps: RequestHandler = async (req, res, next) => {
-  const allBootcamps = await BootcampModel.find();
+  const queryStr = JSON.stringify(req.query);
+  const queryStrWith$Sign = queryStr.replace(/\b(lt|gte|lte|gt|in)\b/g, (match) => '$' + match);
+  const modifiedQuery = JSON.parse(queryStrWith$Sign);
+  const allBootcamps = await BootcampModel.find(modifiedQuery);
   res.status(200).json({ sucess: true, count: allBootcamps.length, data: allBootcamps });
 };
 export const getBootcamps = asyncHandler(_getBootcamps);

@@ -1,3 +1,12 @@
+## 34. Advanced filtering =,gte,let,in ...
+
+```ts
+const queryStr = JSON.stringify(req.query);
+const queryStrWith$Sign = queryStr.replace(/\b(lt|gte|lte|gt|in)\b/g, (match) => '$' + match);
+const modifiedQuery = JSON.parse(queryStrWith$Sign);
+const allBootcamps = await BootcampModel.find(modifiedQuery);
+```
+
 ## 33. Get bootcamps within radius
 
 ```ts
