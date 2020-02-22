@@ -1,3 +1,7 @@
+## 37. Course Model
+
+then add to seed.ts
+
 ## 36. Add pagination
 
 ```ts
