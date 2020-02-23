@@ -1,6 +1,5 @@
 import NodeGeocoder from 'node-geocoder';
 
-console.log('process.env.GEO_CODE_PROVIDER: ', process.env.PORT);
 var options = {
   provider: process.env.GEO_CODE_PROVIDER,
 

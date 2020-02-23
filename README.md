@@ -1,3 +1,38 @@
+## 38. Courses controller and router
+
+- get all courese will have two routes
+
+1. get all courses from all bootcamps (/courses)
+2. get all courses from one bootcamp (bootcamps/:bootcampId/courses)
+
+- (2) start with bootcamps so need to re-route to courses controller when include /:bootcampId/courses
+
+```ts
+// Re-route into other router
+router.use('/:bootcampId/courses', courseRouter);
+```
+
+- index.ts
+
+```ts
+// Route files
+import { bootcampsRouter } from './routes/bootcamps';
+import { coursesRouter } from './routes/courses';
+// ...
+app.use(express.json());
+app.use('/api/v1/bootcamps', bootcampsRouter);
+app.use('/api/v1/courses', coursesRouter);
+```
+
+- routes/courses.ts
+
+```ts
+coursesRouter.route('/').get(getCourses);
+```
+
+```ts
+```
+
 ## 37. Course Model
 
 then add to seed.ts

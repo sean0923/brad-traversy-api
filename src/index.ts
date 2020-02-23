@@ -14,6 +14,7 @@ import { connectDB } from './helpers/db';
 
 // Route files
 import { bootcampsRouter } from './routes/bootcamps';
+import { coursesRouter } from './routes/courses';
 
 // connect to mongo DB
 connectDB();
@@ -29,6 +30,7 @@ if (isDev) {
 
 app.use(express.json());
 app.use('/api/v1/bootcamps', bootcampsRouter);
+app.use('/api/v1/courses', coursesRouter);
 // ! IMPORTANT ERR HANDLER MUST BE PLACED AFTER ROUTE STUFF
 app.use(errorHandler);
 
