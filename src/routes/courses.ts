@@ -1,15 +1,9 @@
 import express from 'express';
 import { getCourses } from '../controllers/courses';
 
+// ! mergeParams is required so that redirect from bootcamps/:bootcampId/courses contains req.params
 export const coursesRouter = express.Router({ mergeParams: true });
 
-// courses/
-// /:bootcampId/courses/
+// /courses/
+// /bootcamps/:bootcampId/courses/
 coursesRouter.route('/').get(getCourses);
-// coursesRouter.route('/').get(getCourses);
-
-// coursesRouter
-//   .route('/:id')
-//   .get(getBootcamp)
-//   .put(updateBootcamp)
-//   .delete(deleteBootcamp);

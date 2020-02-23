@@ -27,11 +27,33 @@ app.use('/api/v1/courses', coursesRouter);
 - routes/courses.ts
 
 ```ts
-export const coursesRouter = express.Router({ mergeParams: true }); // ! IMPORTANT MERGE PARAMS TRUE 
+// ! mergeParams is required so that redirect from bootcamps/:bootcampId/courses contains req.params
+export const coursesRouter = express.Router({ mergeParams: true });
+
+// /courses/
+// /bootcamps/:bootcampId/courses/
 coursesRouter.route('/').get(getCourses);
 ```
 
 ```ts
+// * R
+// @ desc     Get all courses
+// @ route    GET /api/v1/courses
+// @ route    GET /api/v1/:bootcampId/courses
+// @ access   Public
+export const getCourses: RequestHandler = asyncHandler(async (req, res, next) => {
+  let query = null;
+
+  if (req.params.bootcampId) {
+    query = CourseModel.find({ bootcampId: req.params.bootcampId });
+  } else {
+    query = CourseModel.find();
+  }
+
+  const allCourses = await query.exec();
+
+  res.status(200).json({ sucess: true, count: allCourses.length, data: allCourses });
+});
 ```
 
 ## 37. Course Model
