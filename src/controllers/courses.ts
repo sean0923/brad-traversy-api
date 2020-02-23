@@ -18,6 +18,8 @@ export const getCourses: RequestHandler = asyncHandler(async (req, res, next) =>
     query = CourseModel.find();
   }
 
+  query.populate('bootcampId', 'name careers');
+
   const allCourses = await query.exec();
 
   res.status(200).json({ sucess: true, count: allCourses.length, data: allCourses });

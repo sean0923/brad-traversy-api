@@ -1,3 +1,18 @@
+## 39. Populate, Virtuals, and Remove Related Courses
+
+### ^^^ saves multiple req form front-end to backend
+### think all of these could be done manually without using `populate, virtuals`
+
+---
+
+- one bootcamp has many courses (each course has bootcampId)
+- use `populate` to replace bootcampId with bootcamp object
+
+---
+
+- bootcamp does not have any info related to courses
+- use `virtuals` to add virtual key courses to bootcamp obj
+
 ## 38. Courses controller and router
 
 - get all courese will have two routes
