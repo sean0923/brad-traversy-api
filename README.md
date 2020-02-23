@@ -9,7 +9,7 @@
 
 ```ts
 // Re-route into other router
-router.use('/:bootcampId/courses', courseRouter);
+router.use('/:bootcampId/courses', coursesRouter);
 ```
 
 - index.ts
@@ -27,6 +27,7 @@ app.use('/api/v1/courses', coursesRouter);
 - routes/courses.ts
 
 ```ts
+export const coursesRouter = express.Router({ mergeParams: true }); // ! IMPORTANT MERGE PARAMS TRUE 
 coursesRouter.route('/').get(getCourses);
 ```
 

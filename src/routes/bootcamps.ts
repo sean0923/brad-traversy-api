@@ -8,7 +8,12 @@ import {
   getBootcampsWithinRadius,
 } from '../controllers/bootcamps';
 
+import { coursesRouter } from './courses';
+
 export const bootcampsRouter = express.Router();
+
+// Re-route to courses
+bootcampsRouter.use('/:bootcampId/courses', coursesRouter);
 
 bootcampsRouter.route('/radius/:zipcode/:distance').get(getBootcampsWithinRadius);
 

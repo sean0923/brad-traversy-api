@@ -41,7 +41,7 @@ const CourseSchema = new mongoose.Schema({
     required: [true, 'Please add a weeks'],
     enum: ['beginner', 'intermediate', 'advance'],
   },
-  bootcamp: {
+  bootcampId: {
     type: mongoose.Types.ObjectId,
     ref: 'Bootcamp',
   },
