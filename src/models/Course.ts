@@ -16,14 +16,21 @@ export interface Course extends mongoose.Document {
   title: string;
   description: string;
   weeks: number;
+  tuition: number;
   minimumSkill: MinimumSkill;
   scholarshipsAvailable: boolean;
-  bootcamp: string;
+  bootcampId: string;
   user: string;
   createdAt: Date;
 }
 
-const CourseSchema = new mongoose.Schema({
+// model
+export interface CourseModelInterface extends mongoose.Model<Course> {
+  // here we decalre statics
+  getAverageCost: (bootcampId: string) => void;
+}
+
+const CourseSchema = new mongoose.Schema<Course>({
   title: {
     type: String,
     required: [true, 'Please add a title'],
@@ -35,6 +42,10 @@ const CourseSchema = new mongoose.Schema({
   weeks: {
     type: Number,
     required: [true, 'Please add a weeks'],
+  },
+  tuition: {
+    type: Number,
+    required: [true, 'Please add a tuition'],
   },
   minimumSkill: {
     type: String,
@@ -51,4 +62,30 @@ const CourseSchema = new mongoose.Schema({
   },
 });
 
-export const CourseModel = mongoose.model<Course>('Course', CourseSchema);
+CourseSchema.statics.getAverageCost = async function(bootcampId: string) {
+  const res = await CourseModel.aggregate([
+    { $match: { bootcampId: bootcampId } },
+    { $group: { _id: '$bootcampId', averageCost: { $avg: '$tuition' } } },
+  ]);
+  console.log('res: ', res);
+};
+
+CourseSchema.post<Course>('save', function(doc, next) {
+  CourseModel.getAverageCost(doc.bootcampId);
+  // CourseSchema.get
+  // doc.getAverageCost
+  // doc.constructor.(doc.bootcampId);
+  // doc.constructor.getAverageCost(doc.model);
+  // console.log('doc: ', doc);
+  // console.log('this: ', this);
+  // this.constructor
+  // this.model.constructor(this.model).getAverageCost(doc.bootcampId);
+  next();
+});
+
+CourseSchema.pre<Course>('remove', async function(next) {
+  // this.
+  next();
+});
+
+export const CourseModel = mongoose.model<Course, CourseModelInterface>('Course', CourseSchema);

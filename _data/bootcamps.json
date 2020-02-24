@@ -8,15 +8,10 @@
     "phone": "(111) 111-1111",
     "email": "enroll@devworks.com",
     "address": "233 Bay State Rd Boston MA 02215",
-    "careers": [
-      "Web Development",
-      "UI/UX",
-      "Business"
-    ],
+    "careers": ["Web Development", "UI/UX", "Business"],
     "housing": true,
     "jobAssistance": true,
     "jobGuarantee": false,
-    "averageCost": 10000,
     "acceptGi": true
   },
   {
@@ -28,15 +23,10 @@
     "phone": "(222) 222-2222",
     "email": "enroll@moderntech.com",
     "address": "220 Pawtucket St, Lowell, MA 01854",
-    "careers": [
-      "Web Development",
-      "UI/UX",
-      "Mobile Development"
-    ],
+    "careers": ["Web Development", "UI/UX", "Mobile Development"],
     "housing": false,
     "jobAssistance": true,
     "jobGuarantee": false,
-    "averageCost": 1000,
     "acceptGi": true
   },
   {
@@ -48,15 +38,10 @@
     "phone": "(333) 333-3333",
     "email": "enroll@codemasters.com",
     "address": "85 South Prospect Street Burlington VT 05405",
-    "careers": [
-      "Web Development",
-      "Data Science",
-      "Business"
-    ],
+    "careers": ["Web Development", "Data Science", "Business"],
     "housing": false,
     "jobAssistance": false,
     "jobGuarantee": false,
-    "averageCost": 20000,
     "acceptGi": false
   },
   {
@@ -68,16 +53,10 @@
     "phone": "(444) 444-4444",
     "email": "enroll@devcentral.com",
     "address": "45 Upper College Rd Kingston RI 02881",
-    "careers": [
-      "Mobile Development",
-      "Web Development",
-      "Data Science",
-      "Business"
-    ],
+    "careers": ["Mobile Development", "Web Development", "Data Science", "Business"],
     "housing": false,
     "jobAssistance": true,
     "jobGuarantee": true,
-    "averageCost": 5000,
     "acceptGi": true
   }
 ]

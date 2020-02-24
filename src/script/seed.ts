@@ -20,7 +20,7 @@ const coursesData = fs.readFileSync(path.join(__dirname, '../../_data/courses.js
 const seedBootcampsFromJson = async () => {
   try {
     await BootcampModel.create(JSON.parse(bootcampsData));
-    await CourseModel.create(JSON.parse(coursesData));
+    // await CourseModel.create(JSON.parse(coursesData));
     console.log('Bootcamp was imported from JSON'.green.inverse);
     console.log('Course was imported from JSON'.green.inverse);
     process.exit();

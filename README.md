@@ -1,3 +1,8 @@
+## 42. Aggregation (calculating the average cost)
+
+- bootcamps.json -> remove averageCost
+- seed.ts -> generate bootcamp only
+
 ## 41. Update and Delete course
 
 - similar to bootcamp
