@@ -1,3 +1,39 @@
+## 40. Get single course, Create course (by bootcamp owner)
+
+- router/courses
+
+```ts
+coursesRouter
+  .route('/')
+  .get(getCourses)
+  .post(createCourse);
+
+coursesRouter.route('/:id').get(getCourse);
+// ...
+```
+
+- controller/courses
+
+```ts
+// * C
+// @ desc     create course
+// @ route    POST /api/v1/bootcamps/:bootcampsId/courses
+// @ access   Private (only bootcamp owner should be able to create)
+export const createCourse: RequestHandler = asyncHandler(async (req, res, next) => {
+  const bootcamp = await BootcampModel.findById(req.params.bootcampId);
+
+  if (!bootcamp) {
+    return next(new ErrorResponse(`Bootcamp id ${req.params.bootcampId} does not exist`, 404));
+  }
+
+  req.body.bootcampId = req.params.bootcampId;
+
+  const course = await CourseModel.create(req.body);
+
+  res.status(200).json({ sucess: true, data: course });
+});
+```
+
 ## 39. Populate, Virtuals, and delete Courses when bootcamp is `removed`
 
 ### ^^^ saves multiple req form front-end to backend
