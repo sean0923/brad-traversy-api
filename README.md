@@ -1,3 +1,7 @@
+## 41. Update and Delete course
+
+- similar to bootcamp
+
 ## 40. Get single course, Create course (by bootcamp owner)
 
 - router/courses
