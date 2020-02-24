@@ -4,9 +4,7 @@ import { Error } from 'mongoose';
 // const errrr: Error.
 
 export const errorHandler = (err: ErrorResponse, req, res: Response, next) => {
-  let tempErr = { ...err };
-  console.log(err.stack?.red);
-  console.log('err: ', JSON.stringify(err, null, 2).red);
+  let tempErr = new ErrorResponse(err.message, err.statusCode);
 
   // MongoDB bad _id format
   if (err.name === 'CastError') {
