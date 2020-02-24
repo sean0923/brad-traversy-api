@@ -53,6 +53,9 @@ export const getCourse: RequestHandler = asyncHandler(async (req, res, next) => 
   query.populate('bootcampId', 'name careers');
 
   const singleCourse = await query.exec();
+  if (!singleCourse) {
+    return next(new ErrorResponse(`Course id ${req.params.id} does not exist`, 404));
+  }
 
   res.status(200).json({ sucess: true, data: singleCourse });
 });
@@ -75,3 +78,15 @@ export const updateCourse: RequestHandler = asyncHandler(async (req, res, next) 
 });
 
 // * D
+// @ desc     delete course
+// @ route    DELETE /api/v1/courses/:id
+// @ access   Private (only bootcamp owner should be able to delete)
+export const deleteCourse: RequestHandler = asyncHandler(async (req, res, next) => {
+  const deletedCourse = await CourseModel.findByIdAndRemove(req.params.id);
+
+  if (!deletedCourse) {
+    return next(new ErrorResponse(`Course id ${req.params.id} does not exist`, 404));
+  }
+
+  res.status(200).json({ sucess: true, data: deletedCourse });
+});
