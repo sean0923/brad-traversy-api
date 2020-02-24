@@ -4,15 +4,54 @@
 
 ### think all of these could be done manually without using `populate, virtuals`
 
----
+--- Populate
 
 - one bootcamp has many courses (each course has bootcampId)
 - use `populate` to replace bootcampId with bootcamp object
 
----
+```ts
+query.populate('bootcampId', 'name careers');
+
+const allCourses = await query.exec();
+```
+
+--- Virtuals
 
 - bootcamp does not have any info related to courses
 - use `virtuals` to add virtual key courses to bootcamp obj
+
+```ts
+// at models/bootcamps.ts
+// { toJSON: { virtuals: true } }
+BootcampSchema.virtual('courses', {
+  ref: 'Course',
+  localField: '_id',
+  foreignField: 'bootcampId',
+});
+
+// then can be populated at `controllers/bootcamps`
+const singleBootcamp = await BootcampModel.findById(req.params.id).populate('courses');
+```
+
+--- Delete courses when bootcamp is `removed`
+
+```ts
+// remove all courses in this bootcamp when remove
+BootcampSchema.pre<Bootcamp>('remove', async function(next) {
+  console.log(`delete all courses in bootcampId: ${this._id}`.green.inverse);
+  await this.model('Course').deleteMany({ bootcampId: this._id });
+
+  next();
+});
+```
+
+- findByIdAndDelete does not triger 'remove'
+- So need to do
+
+```ts
+const bootcamp = await BootcampModel.findById(req.params.id);
+bootcamp?.remove();
+```
 
 ## 38. Courses controller and router
 

@@ -17,7 +17,7 @@ export const createBootcamp: RequestHandler = asyncHandler(async (req, res, next
 // @ desc     Get all bootcamps
 // @ route    GET /api/v1/bootcamps
 // @ access   Public
-const _getBootcamps: RequestHandler = async (req, res, next) => {
+export const getBootcamps: RequestHandler = asyncHandler(async (req, res, next) => {
   const queryStr = JSON.stringify(req.query);
   const queryStrWith$Sign = queryStr.replace(/\b(lt|gte|lte|gt|in)\b/g, (match) => '$' + match);
   const modifiedQuery = JSON.parse(queryStrWith$Sign);
@@ -58,14 +58,14 @@ const _getBootcamps: RequestHandler = async (req, res, next) => {
   }
 
   query = query.skip(startIdx).limit(limit);
+  query = query.populate('courses');
 
   const allBootcamps = await query.exec();
 
   res
     .status(200)
     .json({ sucess: true, count: allBootcamps.length, pagination, data: allBootcamps });
-};
-export const getBootcamps = asyncHandler(_getBootcamps);
+});
 
 // @ desc     Get a single bootcamp
 // @ route    GET /api/v1/bootcamp/:id
@@ -99,7 +99,7 @@ export const updateBootcamp: RequestHandler = asyncHandler(async (req, res, next
 // @ desc     delete bootcamp
 // @ route    DELETE /api/v1/bootcamp/:id
 // @ access   Private
-const _deleteBootcamp: RequestHandler = async (req, res, next) => {
+export const deleteBootcamp: RequestHandler = asyncHandler(async (req, res, next) => {
   // ! findByIdAndDelete does not trigger pre `delete`
   // ! must use find then remove in order for `pre` to fire
   // const deletedBootcamp = await BootcampModel.findByIdAndDelete(req.params.id);
@@ -110,14 +110,13 @@ const _deleteBootcamp: RequestHandler = async (req, res, next) => {
     return res.status(400).json({ sucess: false, errMsg: 'bootcamp does not exsit' });
   }
   res.status(200).json({ sucess: true, data: bootcamp });
-};
-export const deleteBootcamp = asyncHandler(_deleteBootcamp);
+});
 
 // *
 // @ desc     get bootcamp within certain radius
 // @ route    GET /api/v1/bootcamp/radius/:zipcode/:distance
 // @ access   Private
-const _getBootcampsWithinRadius: RequestHandler = async (req, res, next) => {
+export const getBootcampsWithinRadius: RequestHandler = asyncHandler(async (req, res, next) => {
   const { zipcode, distance } = req.params;
   const location = await geocode.geocode(zipcode);
   const lng = location[0].longitude;
@@ -133,5 +132,4 @@ const _getBootcampsWithinRadius: RequestHandler = async (req, res, next) => {
   });
 
   res.status(200).json({ sucess: true, count: bootcamps.length, data: bootcamps });
-};
-export const getBootcampsWithinRadius = asyncHandler(_getBootcampsWithinRadius);
+});
