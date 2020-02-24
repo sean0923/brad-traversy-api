@@ -1,6 +1,7 @@
-## 39. Populate, Virtuals, and Remove Related Courses
+## 39. Populate, Virtuals, and delete Courses when bootcamp is `removed`
 
 ### ^^^ saves multiple req form front-end to backend
+
 ### think all of these could be done manually without using `populate, virtuals`
 
 ---
