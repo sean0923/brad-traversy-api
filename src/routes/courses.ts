@@ -1,5 +1,5 @@
 import express from 'express';
-import { getCourses, getCourse, createCourse } from '../controllers/courses';
+import { getCourses, getCourse, createCourse, updateCourse } from '../controllers/courses';
 
 // ! mergeParams is required so that redirect from bootcamps/:bootcampId/courses contains req.params
 export const coursesRouter = express.Router({ mergeParams: true });
@@ -11,4 +11,8 @@ coursesRouter
   .get(getCourses)
   .post(createCourse);
 
-coursesRouter.route('/:id').get(getCourse);
+coursesRouter
+  .route('/:id')
+  .get(getCourse)
+  .patch(updateCourse);
+// .delete();

@@ -15,6 +15,7 @@ export const bootcampsRouter = express.Router();
 // Re-route to courses
 bootcampsRouter.use('/:bootcampId/courses', coursesRouter);
 
+// get bootcamp within radius
 bootcampsRouter.route('/radius/:zipcode/:distance').get(getBootcampsWithinRadius);
 
 bootcampsRouter
@@ -25,7 +26,7 @@ bootcampsRouter
 bootcampsRouter
   .route('/:id')
   .get(getBootcamp)
-  .put(updateBootcamp)
+  .patch(updateBootcamp)
   .delete(deleteBootcamp);
 
 // bootcampsRouter.get('/', (req, res) => {
