@@ -72,7 +72,7 @@ export const getBootcamps = asyncHandler(_getBootcamps);
 // @ route    GET /api/v1/bootcamp/:id
 // @ access   Public
 const _getBootcamp: RequestHandler = async (req: Request, res, next) => {
-  const singleBootcamp = await BootcampModel.findById(req.params.id);
+  const singleBootcamp = await BootcampModel.findById(req.params.id).populate('courses');
   if (!singleBootcamp) {
     return res.status(400).json({ sucess: false, errMsg: 'bootcamp does not exsit' });
   }
@@ -102,11 +102,16 @@ export const updateBootcamp = asyncHandler(_updateBootcamp);
 // @ route    DELETE /api/v1/bootcamp/:id
 // @ access   Private
 const _deleteBootcamp: RequestHandler = async (req, res, next) => {
-  const deletedBootcamp = await BootcampModel.findByIdAndDelete(req.params.id);
-  if (!deletedBootcamp) {
+  // ! findByIdAndDelete does not trigger pre `delete`
+  // ! must use find then remove in order for `pre` to fire
+  // const deletedBootcamp = await BootcampModel.findByIdAndDelete(req.params.id);
+  const bootcamp = await BootcampModel.findById(req.params.id);
+  bootcamp?.remove();
+
+  if (!bootcamp) {
     return res.status(400).json({ sucess: false, errMsg: 'bootcamp does not exsit' });
   }
-  res.status(200).json({ sucess: true, data: deletedBootcamp });
+  res.status(200).json({ sucess: true, data: bootcamp });
 };
 export const deleteBootcamp = asyncHandler(_deleteBootcamp);
 
