@@ -1,5 +1,69 @@
 ## 43. Upload photo with express-fileupload
 
+- use expressFileupload middleware at top of index.ts
+
+```ts
+// File upload
+app.use(expressFileupload());
+```
+
+- controller/bootcamp
+- with the middleware now req will have .files
+- restrict to `image` and file size less than 1MB
+- then update bootcamp `photo` field with name
+
+```ts
+// @ desc     upload bootcamp photo
+// @ route    PATCH /api/v1/bootcamp/:id/photo
+// @ access   Private
+export const uploadPhoto: RequestHandler = asyncHandler(async (req, res, next) => {
+  if (!req.files) {
+    return next(new ErrorResponse('File is required', 400));
+  }
+
+  const file: UploadedFile = req.files.files as UploadedFile;
+
+  if (!file.mimetype.startsWith('image')) {
+    return next(new ErrorResponse('Only image can be uploaded', 400));
+  }
+
+  const fileSizeLimit = parseInt(process.env.UPLOAD_FILE_SIZE_LIMIT as string);
+  if (file.size > fileSizeLimit) {
+    return next(
+      new ErrorResponse(`File size should be smaller than ${fileSizeLimit / 1000000}MB`, 400)
+    );
+  }
+
+  const folderName = __dirname + `/../public/uploads`;
+  const customFilename = `photo_${req.params.id}${path.extname(file.name)}`;
+
+  file.mv(path.resolve(`${folderName}/${customFilename}`), async (err) => {
+    if (err) {
+      console.log('err: ', err);
+      return next(new ErrorResponse(`Fail to upload file`, 500));
+    }
+
+    const updatedBootcamp = await BootcampModel.findOneAndUpdate(
+      req.params.id,
+      { photo: customFilename },
+      { new: true }
+    );
+
+    res.status(200).json({ sucess: true, data: updatedBootcamp });
+  });
+});
+```
+
+- add acess to routes/bootcamps
+
+- Set static folder `public` so that photo can be access from FE with url
+- ex) http://localhost:5000/uploads/photo_5d725a1b7b292f5f8ceff788.jpg
+
+```ts
+// Set static folder
+app.use(express.static(path.resolve(__dirname + '/./public')));
+```
+
 ## 42. Aggregation (calculating the average cost)
 
 - bootcamps.json -> remove averageCost

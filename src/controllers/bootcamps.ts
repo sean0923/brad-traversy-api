@@ -119,10 +119,10 @@ export const uploadPhoto: RequestHandler = asyncHandler(async (req, res, next) =
     );
   }
 
-  // so that same name should not be overwritten
+  const folderName = __dirname + `/../public/uploads`;
   const customFilename = `photo_${req.params.id}${path.extname(file.name)}`;
 
-  file.mv(path.resolve(__dirname + `/../public/uploads/${customFilename}`), async (err) => {
+  file.mv(path.resolve(`${folderName}/${customFilename}`), async (err) => {
     if (err) {
       console.log('err: ', err);
       return next(new ErrorResponse(`Fail to upload file`, 500));
