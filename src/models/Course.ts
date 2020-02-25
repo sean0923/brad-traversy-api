@@ -27,7 +27,7 @@ export interface Course extends mongoose.Document {
 // model
 export interface CourseModelInterface extends mongoose.Model<Course> {
   // here we decalre statics
-  getAverageCost: (bootcampId: string) => void;
+  updateAverageCost: (bootcampId: string) => void;
 }
 
 const CourseSchema = new mongoose.Schema<Course>({
@@ -62,29 +62,32 @@ const CourseSchema = new mongoose.Schema<Course>({
   },
 });
 
-CourseSchema.statics.getAverageCost = async function(bootcampId: string) {
-  const res = await CourseModel.aggregate([
+CourseSchema.statics.updateAverageCost = async function(bootcampId: string) {
+  const arrOfObj: { _id: string; averageCost: number }[] = await CourseModel.aggregate([
     { $match: { bootcampId: bootcampId } },
     { $group: { _id: '$bootcampId', averageCost: { $avg: '$tuition' } } },
   ]);
-  console.log('res: ', res);
+
+  try {
+    const averageCost = Math.ceil(arrOfObj[0].averageCost);
+    const updatedBootcamp = await this.model('Bootcamp').findByIdAndUpdate(
+      bootcampId,
+      { averageCost },
+      { new: true }
+    );
+    console.log('updatedBootcamp: ', updatedBootcamp);
+  } catch (error) {
+    console.log('error: ', error);
+  }
 };
 
-CourseSchema.post<Course>('save', function(doc, next) {
-  CourseModel.getAverageCost(doc.bootcampId);
-  // CourseSchema.get
-  // doc.getAverageCost
-  // doc.constructor.(doc.bootcampId);
-  // doc.constructor.getAverageCost(doc.model);
-  // console.log('doc: ', doc);
-  // console.log('this: ', this);
-  // this.constructor
-  // this.model.constructor(this.model).getAverageCost(doc.bootcampId);
+CourseSchema.post<Course>('save', async function(doc, next) {
+  CourseModel.updateAverageCost(doc.bootcampId);
   next();
 });
 
-CourseSchema.pre<Course>('remove', async function(next) {
-  // this.
+CourseSchema.post<Course>('remove', async function(doc, next) {
+  CourseModel.updateAverageCost(doc.bootcampId);
   next();
 });
 

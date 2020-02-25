@@ -155,4 +155,4 @@ BootcampSchema.pre<Bootcamp>('remove', async function(next) {
   next();
 });
 
-export const BootcampModel = mongoose.model('Bootcamp', BootcampSchema);
+export const BootcampModel = mongoose.model<Bootcamp>('Bootcamp', BootcampSchema);

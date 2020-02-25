@@ -82,11 +82,13 @@ export const updateCourse: RequestHandler = asyncHandler(async (req, res, next) 
 // @ route    DELETE /api/v1/courses/:id
 // @ access   Private (only bootcamp owner should be able to delete)
 export const deleteCourse: RequestHandler = asyncHandler(async (req, res, next) => {
-  const deletedCourse = await CourseModel.findByIdAndRemove(req.params.id);
+  const willBeRemovedCourse = await CourseModel.findById(req.params.id);
 
-  if (!deletedCourse) {
+  if (!willBeRemovedCourse) {
     return next(new ErrorResponse(`Course id ${req.params.id} does not exist`, 404));
   }
 
-  res.status(200).json({ sucess: true, data: deletedCourse });
+  await willBeRemovedCourse.remove();
+
+  res.status(200).json({ sucess: true, data: willBeRemovedCourse });
 });

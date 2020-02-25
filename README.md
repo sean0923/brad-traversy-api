@@ -2,6 +2,41 @@
 
 - bootcamps.json -> remove averageCost
 - seed.ts -> generate bootcamp only
+- add statics method to CourseSchema
+  -- inside of CourseSchema this shouold be availalbe to do `this.model('Bootcamp').findByIdAndUpdate`
+
+```ts
+CourseSchema.statics.updateAverageCost = async function(bootcampId: string) {
+  const arrOfObj: { _id: string; averageCost: number }[] = await CourseModel.aggregate([
+    { $match: { bootcampId: bootcampId } },
+    { $group: { _id: '$bootcampId', averageCost: { $avg: '$tuition' } } },
+  ]);
+
+  try {
+    const averageCost = Math.ceil(arrOfObj[0].averageCost);
+    const updatedBootcamp = await this.model('Bootcamp').findByIdAndUpdate(
+      bootcampId,
+      { averageCost },
+      { new: true }
+    );
+    console.log('updatedBootcamp: ', updatedBootcamp);
+  } catch (error) {
+    console.log('error: ', error);
+  }
+};
+
+CourseSchema.post<Course>('save', async function(doc, next) {
+  CourseModel.updateAverageCost(doc.bootcampId);
+  next();
+});
+
+CourseSchema.post<Course>('remove', async function(doc, next) {
+  CourseModel.updateAverageCost(doc.bootcampId);
+  next();
+});
+
+export const CourseModel = mongoose.model<Course, CourseModelInterface>('Course', CourseSchema);
+```
 
 ## 41. Update and Delete course
 
