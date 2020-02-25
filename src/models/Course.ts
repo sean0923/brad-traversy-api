@@ -70,12 +70,8 @@ CourseSchema.statics.updateAverageCost = async function(bootcampId: string) {
 
   try {
     const averageCost = Math.ceil(arrOfObj[0].averageCost);
-    const updatedBootcamp = await this.model('Bootcamp').findByIdAndUpdate(
-      bootcampId,
-      { averageCost },
-      { new: true }
-    );
-    console.log('updatedBootcamp: ', updatedBootcamp);
+    // const updatedBootcamp = await this.model('Bootcamp').findByIdAndUpdate(
+    await this.model('Bootcamp').findByIdAndUpdate(bootcampId, { averageCost }, { new: true });
   } catch (error) {
     console.log('error: ', error);
   }

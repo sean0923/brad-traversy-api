@@ -6,6 +6,7 @@ import {
   updateBootcamp,
   deleteBootcamp,
   getBootcampsWithinRadius,
+  uploadPhoto,
 } from '../controllers/bootcamps';
 
 import { coursesRouter } from './courses';
@@ -17,6 +18,9 @@ bootcampsRouter.use('/:bootcampId/courses', coursesRouter);
 
 // get bootcamp within radius
 bootcampsRouter.route('/radius/:zipcode/:distance').get(getBootcampsWithinRadius);
+
+// upload photo
+bootcampsRouter.use('/:id/photo', uploadPhoto);
 
 bootcampsRouter
   .route('/')

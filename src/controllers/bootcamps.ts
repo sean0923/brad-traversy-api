@@ -1,8 +1,11 @@
+import path from 'path';
 import { RequestHandler, Request } from 'express';
 import { BootcampModel } from '../models/Bootcamp';
 import { ErrorResponse } from '../helpers/ErrorResponse';
 import { asyncHandler } from '../middlewares/async-handler';
 import { geocode } from '../helpers/geocode';
+import { UploadedFile } from 'express-fileupload';
+// import moduleName from '../public/uploads'
 
 // * C
 // @ desc     create new bootcamp
@@ -93,6 +96,46 @@ export const updateBootcamp: RequestHandler = asyncHandler(async (req, res, next
     return next(new ErrorResponse('bootcamp does not exist', 400));
   }
   res.status(200).json({ sucess: true, data: updatedBootcamp });
+});
+
+// @ desc     upload bootcamp photo
+// @ route    PATCH /api/v1/bootcamp/:id/photo
+// @ access   Private
+export const uploadPhoto: RequestHandler = asyncHandler(async (req, res, next) => {
+  if (!req.files) {
+    return next(new ErrorResponse('File is required', 400));
+  }
+
+  const file: UploadedFile = req.files.files as UploadedFile;
+
+  if (!file.mimetype.startsWith('image')) {
+    return next(new ErrorResponse('Only image can be uploaded', 400));
+  }
+
+  const fileSizeLimit = parseInt(process.env.UPLOAD_FILE_SIZE_LIMIT as string);
+  if (file.size > fileSizeLimit) {
+    return next(
+      new ErrorResponse(`File size should be smaller than ${fileSizeLimit / 1000000}MB`, 400)
+    );
+  }
+
+  // so that same name should not be overwritten
+  const customFilename = `photo_${req.params.id}${path.extname(file.name)}`;
+
+  file.mv(path.resolve(__dirname + `/../public/uploads/${customFilename}`), async (err) => {
+    if (err) {
+      console.log('err: ', err);
+      return next(new ErrorResponse(`Fail to upload file`, 500));
+    }
+
+    const updatedBootcamp = await BootcampModel.findOneAndUpdate(
+      req.params.id,
+      { photo: customFilename },
+      { new: true }
+    );
+
+    res.status(200).json({ sucess: true, data: updatedBootcamp });
+  });
 });
 
 // * D

@@ -1,6 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+import expressFileupload from 'express-fileupload';
+import path from 'path';
+// import moduleName from './public/uploads'
 
 import 'colors';
 
@@ -27,6 +30,12 @@ if (isDev) {
   app.use(logger);
   app.use(morgan('dev'));
 }
+
+// Set static folder
+app.use(express.static(path.resolve(__dirname + '/./public')));
+
+// File upload
+app.use(expressFileupload());
 
 app.use(express.json());
 app.use('/api/v1/bootcamps', bootcampsRouter);
