@@ -1,4 +1,4 @@
-## 44. Middleware that can handle select, sort, page, limit, populate (advanced result middleware)
+## 44. Middleware that can handle select, sort, page, limit, populate (advanced results middleware)
 
 ## 43. Upload photo with express-fileupload
 
