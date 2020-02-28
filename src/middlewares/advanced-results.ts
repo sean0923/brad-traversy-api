@@ -1,8 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
 import { Model } from 'mongoose';
 
-export const advancedResults = (model: Model<any>, populate: string) => async (
-  req: Request,
+export interface ReqWithAdvancedResults extends Request {
+  advancedResults: {
+    success: boolean;
+    data: any;
+    count: number;
+    pagination: {
+      next?: number;
+      prev?: number;
+    };
+  };
+}
+
+export const advancedResults = (model: Model<any>, populate: any) => async (
+  req: ReqWithAdvancedResults,
   res: Response,
   next: NextFunction
 ) => {
@@ -46,9 +58,20 @@ export const advancedResults = (model: Model<any>, populate: string) => async (
   }
 
   query = query.skip(startIdx).limit(limit);
-  query = query.populate(populate);
+  if (typeof populate === 'string') {
+    query = query.populate(populate);
+  } else {
+    query = query.populate(populate.populate, populate.select);
+  }
 
   const data = await query.exec();
+
+  req.advancedResults = {
+    success: true,
+    count: data.length,
+    pagination,
+    data,
+  };
 
   next();
 };

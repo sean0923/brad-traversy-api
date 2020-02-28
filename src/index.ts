@@ -34,7 +34,7 @@ if (isDev) {
 // Set static folder
 app.use(express.static(path.resolve(__dirname + '/./public')));
 
-// File upload
+// File upload middleware
 app.use(expressFileupload());
 
 app.use(express.json());

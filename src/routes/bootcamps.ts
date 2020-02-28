@@ -9,7 +9,10 @@ import {
   uploadPhoto,
 } from '../controllers/bootcamps';
 
+import { advancedResults } from '../middlewares/advanced-results';
+
 import { coursesRouter } from './courses';
+import { BootcampModel } from '../models/Bootcamp';
 
 export const bootcampsRouter = express.Router();
 
@@ -22,9 +25,11 @@ bootcampsRouter.route('/radius/:zipcode/:distance').get(getBootcampsWithinRadius
 // upload photo
 bootcampsRouter.use('/:id/photo', uploadPhoto);
 
+//
+
 bootcampsRouter
   .route('/')
-  .get(getBootcamps)
+  .get(advancedResults(BootcampModel, 'courses') as any, getBootcamps)
   .post(createBootcamp);
 
 bootcampsRouter

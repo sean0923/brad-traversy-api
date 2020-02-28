@@ -3,6 +3,7 @@ import { CourseModel } from '../models/Course';
 import { BootcampModel } from '../models/Bootcamp';
 import { asyncHandler } from '../middlewares/async-handler';
 import { ErrorResponse } from '../helpers/ErrorResponse';
+import { ReqWithAdvancedResults } from '../middlewares/advanced-results';
 
 // * C
 // @ desc     create course
@@ -27,27 +28,26 @@ export const createCourse: RequestHandler = asyncHandler(async (req, res, next) 
 // @ route    GET /api/v1/courses
 // @ route    GET /api/v1/:bootcampId/courses
 // @ access   Public
-export const getCourses: RequestHandler = asyncHandler(async (req, res, next) => {
+export const getCourses = asyncHandler(async (req: ReqWithAdvancedResults, res, next) => {
   let query = null;
 
   if (req.params.bootcampId) {
     query = CourseModel.find({ bootcampId: req.params.bootcampId });
+    query.populate('bootcampId', 'name careers');
+
+    const allCourses = await query.exec();
+
+    res.status(200).json({ sucess: true, count: allCourses.length, data: allCourses });
   } else {
-    query = CourseModel.find();
+    res.status(200).json(req.advancedResults);
   }
-
-  query.populate('bootcampId', 'name careers');
-
-  const allCourses = await query.exec();
-
-  res.status(200).json({ sucess: true, count: allCourses.length, data: allCourses });
 });
 
 // * R (single)
 // @ desc     Get single course
 // @ route    GET /api/v1/courses/:id
 // @ access   Public
-export const getCourse: RequestHandler = asyncHandler(async (req, res, next) => {
+export const getCourse = asyncHandler(async (req, res, next) => {
   let query = CourseModel.findById(req.params.id);
 
   query.populate('bootcampId', 'name careers');
