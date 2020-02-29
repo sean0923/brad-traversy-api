@@ -1,3 +1,9 @@
+## 45. Set up signup
+
+- controllers/auth
+- routes/auth
+- models/User
+
 ## 44. Middleware that can handle select, sort, page, limit, populate (advanced results middleware)
 
 ```ts
