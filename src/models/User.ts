@@ -1,6 +1,4 @@
 import mongoose from 'mongoose';
-import slugify from 'slugify';
-import { geocode } from '../helpers/geocode';
 
 type Role = 'user' | 'publisher';
 
@@ -14,15 +12,28 @@ interface User extends mongoose.Document {
   createdAt: Date;
 }
 
-const BootcampSchema = new mongoose.Schema<User>({
-  name: { type: String, required: [true, 'Please add a name'] },
-  email: { type: String, required: [true, 'Please add an email'], unique: true },
-  password: { type: String, required: [true, 'Please add a password'], select: false },
+const emialRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
+const UserSchema = new mongoose.Schema<User>({
+  name: { type: String, required: [true, 'Please add a name'] },
+  email: {
+    type: String,
+    required: [true, 'Please add an email'],
+    unique: true,
+    match: [emialRegex, 'Please add valid email'],
+  },
+  password: {
+    type: String,
+    required: [true, 'Please add a password'],
+    minlength: 6,
+    select: false, // select false to not return password to client
+  },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-export const BootcampModel = mongoose.model<User>('Bootcamp', BootcampSchema);
+export const UserModel = mongoose.model<User>('User', UserSchema);
