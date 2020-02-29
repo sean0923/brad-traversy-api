@@ -4,6 +4,27 @@
 - routes/auth
 - models/User
 
+---
+
+#### controllers/auth
+
+```ts
+```
+
+---
+
+#### routes/auth
+
+```ts
+```
+
+---
+
+#### models/User
+
+```ts
+```
+
 ## 44. Middleware that can handle select, sort, page, limit, populate (advanced results middleware)
 
 ```ts
