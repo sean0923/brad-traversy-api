@@ -14,10 +14,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/express-fileupload": "^1.1.2",
     "@types/mongoose": "^5.7.0",
     "@types/morgan": "^1.7.37",
     "@types/node-geocoder": "^3.24.1",
+    "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",

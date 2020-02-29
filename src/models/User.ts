@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 type Role = 'user' | 'publisher';
 
@@ -28,12 +29,25 @@ const UserSchema = new mongoose.Schema<User>({
     minlength: 6,
     select: false, // select false to not return password to client
   },
+  role: {
+    type: String,
+    enum: ['user', 'publisher'],
+    default: 'user',
+  },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
   createdAt: {
     type: Date,
     default: Date.now,
   },
+});
+
+UserSchema.pre<User>('save', async function(next) {
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(this.password, salt);
+  this.password = hashedPassword;
+
+  next();
 });
 
 export const UserModel = mongoose.model<User>('User', UserSchema);
