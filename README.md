@@ -2,8 +2,40 @@
 
 /middlewraes/protect
 
+```ts
+export const protect = asyncHandler(async (req: ReqWithUser, res: Response, next: NextFunction) => {
+  const token = getToken(req);
+
+  if (!token) {
+    return next(new ErrorResponse('Not authorized to access this route', 401));
+  }
+
+  const decodedJwt = jwt.verify(token, process.env.JWT_SECRET as string);
+
+  try {
+    const user = await UserModel.findById((decodedJwt as any).id);
+
+    if (!user) {
+      return next(new ErrorResponse('User does not exist', 400));
+    }
+
+    // from this line user will be available at req
+    // in otherwords, req.user will be availble for all protected routes
+    req.user = user;
+
+    next();
+  } catch (error) {
+    return next(error);
+  }
+});
+```
+
 - /api/vi/auth/me
 - get me route to get my info
+
+```ts
+authRouter.route('/my-info').get(protect, getMyInfo);
+```
 
 ## 49. Sending JWT in a Cookie
 

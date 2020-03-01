@@ -42,6 +42,8 @@ export const protect = asyncHandler(async (req: ReqWithUser, res: Response, next
       return next(new ErrorResponse('User does not exist', 400));
     }
 
+    // from this line user will be available at req
+    // in otherwords, req.user will be availble for all protected routes
     req.user = user;
 
     next();
