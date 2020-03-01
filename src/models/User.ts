@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-type Role = 'user' | 'publisher';
+// assigning admin is only possible through db UI
+type Role = 'user' | 'publisher' | 'admin';
 
 export interface User extends mongoose.Document {
   name: string;

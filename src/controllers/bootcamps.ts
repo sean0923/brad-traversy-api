@@ -7,13 +7,26 @@ import { geocode } from '../helpers/geocode';
 import { UploadedFile } from 'express-fileupload';
 // import moduleName from '../public/uploads'
 import { ReqWithAdvancedResults } from '../middlewares/advanced-results';
+import { ReqWithUser } from '../middlewares/auth';
 
 // * C
 // @ desc     create new bootcamp
 // @ route    POST /api/v1/bootcamp
 // @ access   Private
 export const createBootcamp = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: ReqWithUser, res: Response, next: NextFunction) => {
+    const userHasBootcamp = await BootcampModel.findOne({ userId: req.user._id });
+    console.log('req.user._id: ', req.user._id);
+    console.log('userHasBootcamp: ', userHasBootcamp);
+    const userNotAdmin = req.user.role !== 'admin';
+    console.log('userNotAdmin: ', userNotAdmin);
+
+    if (userHasBootcamp && userNotAdmin) {
+      return next(
+        new ErrorResponse(`user id ${req.user._id} cannot create more than one bootcamp`, 403)
+      );
+    }
+
     const bootcamp = await BootcampModel.create(req.body);
     res.status(201).json({ sucess: true, data: bootcamp });
   }

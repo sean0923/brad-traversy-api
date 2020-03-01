@@ -13,6 +13,7 @@ import { advancedResults } from '../middlewares/advanced-results';
 
 import { coursesRouter } from './courses';
 import { BootcampModel } from '../models/Bootcamp';
+import { protect, authorize } from '../middlewares/auth';
 
 export const bootcampsRouter = express.Router();
 
@@ -30,7 +31,7 @@ bootcampsRouter.use('/:id/photo', uploadPhoto);
 bootcampsRouter
   .route('/')
   .get(advancedResults(BootcampModel, 'courses') as any, getBootcamps)
-  .post(createBootcamp);
+  .post(protect, authorize('admin', 'publisher') as any, createBootcamp);
 
 bootcampsRouter
   .route('/:id')

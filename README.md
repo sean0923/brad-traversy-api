@@ -1,5 +1,7 @@
 ## 53. Set up bootcamp and user relationship (and update seed.ts)
 
+#### ALMOST DONE WITH BOOTCAMP USER RELATIONSHIP -- CHECK CREATE BOOTCAMP
+
 ## 52. Role Authorization
 
 - authorize middleare
