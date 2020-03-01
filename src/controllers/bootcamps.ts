@@ -100,7 +100,7 @@ export const getBootcamp: RequestHandler = asyncHandler(async (req: Request, res
 
 // * U
 // @ desc     update bootcamp
-// @ route    PUT /api/v1/bootcamp/:id
+// @ route    PATCH /api/v1/bootcamp/:id
 // @ access   Private
 export const updateBootcamp: RequestHandler = asyncHandler(async (req, res, next) => {
   const updatedBootcamp = await BootcampModel.findByIdAndUpdate(req.params.id, req.body, {

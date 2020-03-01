@@ -24,5 +24,5 @@ export const resSendJwt = (res: Response, user: User) => {
       httpOnly: true,
       ...(process.env.NODE_ENV === 'production' && { secure: true }),
     })
-    .json({ sucess: true, token });
+    .json({ sucess: true, token, userId: user._id });
 };
