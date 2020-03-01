@@ -25,4 +25,4 @@ coursesRouter
   .route('/:id')
   .get(getCourse)
   .patch(updateCourse)
-  .delete(protect, authorize('admin', 'publisher') as any, deleteCourse);
+  .delete(protect, authorize('admin', 'publisher') as any, deleteCourse); //! protect then authorize! order MATTERS!

@@ -1,5 +1,34 @@
 ## 52. Role Authorization
 
+- authorize middleare
+
+```ts
+export const authorize = (...roles: string[]) => (
+  req: ReqWithUser,
+  res: Response,
+  next: NextFunction
+) => {
+  const isAuthorized = roles.includes(req.user.role);
+
+  if (!isAuthorized) {
+    return next(
+      new ErrorResponse(`user role ${req.user.role} is not authorize to perform this action`, 403)
+    );
+  }
+
+  next();
+};
+```
+
+- make sure place it after protect to get req.user
+
+```ts
+coursesRouter
+  .route('/:id')
+  .get(getCourse)
+  .patch(updateCourse)
+  .delete(protect, authorize('admin', 'publisher') as any, deleteCourse); //! protect then authorize! order MATTERS!
+```
 
 ## 51. Postman test tab for easier Authorization
 
