@@ -12,7 +12,7 @@ export const signupNewUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name, email, password, role } = req.body;
     const user = await UserModel.create({ name, email, password, role });
-    const token = user.getJwtToken();
+    const token = user.getJwtWithExpireTime();
 
     res.status(200).json({ sucess: true, token });
   }
@@ -37,7 +37,7 @@ export const signin = asyncHandler(async (req: Request, res: Response, next: Nex
     return next(new ErrorResponse('Invalid user credentials', 400));
   }
 
-  const token = user.getJwtToken();
+  const token = user.getJwtWithExpireTime();
 
   res.status(200).json({ sucess: true, token });
 });

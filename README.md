@@ -1,3 +1,5 @@
+## 49. Sending JWT in a Cookie
+
 ## 48. Signin (check password --> return JWT)
 
 - check password
@@ -32,7 +34,7 @@ export const signin = asyncHandler(async (req: Request, res: Response, next: Nex
     return next(new ErrorResponse('Invalid user credentials', 400));
   }
 
-  const token = user.getJwtToken();
+  const token = user.getJwtWithExpireTime();
 
   res.status(200).json({ sucess: true, token });
 });
@@ -52,7 +54,7 @@ authRouter.route('/signin').post(signin);
 
 ```ts
 const user = await UserModel.create({ name, email, password, role });
-const token = user.getJwtToken();
+const token = user.getJwtWithExpireTime();
 
 res.status(200).json({ sucess: true, token });
 ```
