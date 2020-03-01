@@ -1,3 +1,16 @@
+## 47. Json Web Token (JWT)
+
+- npm install jsonwebtoken types/jsonwebtoken
+
+- return jwt when user is created
+
+```ts
+const user = await UserModel.create({ name, email, password, role });
+const token = user.getJwtToken();
+
+res.status(200).json({ sucess: true, token });
+```
+
 ### 46. Create user (sign up?)
 
 - bcryptjs (there is lb bcrypt but seems to have issue on window, so use bcryptjs)

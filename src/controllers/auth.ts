@@ -12,6 +12,8 @@ export const signUpNewUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name, email, password, role } = req.body;
     const user = await UserModel.create({ name, email, password, role });
-    res.status(200).json({ sucess: true, data: user });
+    const token = user.getJwtToken();
+
+    res.status(200).json({ sucess: true, token });
   }
 );
