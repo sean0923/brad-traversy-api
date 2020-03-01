@@ -55,6 +55,7 @@ const CourseSchema = new mongoose.Schema<Course>({
   bootcampId: {
     type: mongoose.Types.ObjectId,
     ref: 'Bootcamp',
+    required: true,
   },
   createdAt: {
     type: Date,
