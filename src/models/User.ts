@@ -14,6 +14,7 @@ interface User extends mongoose.Document {
   createdAt: Date;
   //
   getJwtToken: () => string;
+  checkPassword: (password: string) => Promise<boolean>;
 }
 
 // interface Method {
@@ -62,6 +63,10 @@ UserSchema.methods.getJwtToken = function() {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
   return token;
+};
+
+UserSchema.methods.checkPassword = function(enteredPassword: string) {
+  return bcrypt.compare(enteredPassword, this.password);
 };
 
 export const UserModel = mongoose.model<User>('User', UserSchema);

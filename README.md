@@ -1,3 +1,49 @@
+## 48. Signin (check password --> return JWT)
+
+- check password
+- return jwt
+
+-- models/User
+
+```ts
+UserSchema.methods.checkPassword = function(enteredPassword: string) {
+  return bcrypt.compare(enteredPassword, this.password);
+};
+```
+
+-- controller/auth
+
+```ts
+// @ desc     signin
+// @ route    POST /api/v1/auth/signin
+// @ access   Public
+export const signin = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  const { email, password } = req.body;
+
+  const user = await UserModel.findOne({ email }).select('password'); // select password because in schema level select password false
+
+  if (!user) {
+    return next(new ErrorResponse('Invalid user credentials', 400));
+  }
+
+  const isCorrectPassword = await user.checkPassword(password);
+
+  if (!isCorrectPassword) {
+    return next(new ErrorResponse('Invalid user credentials', 400));
+  }
+
+  const token = user.getJwtToken();
+
+  res.status(200).json({ sucess: true, token });
+});
+```
+
+-- routes/auth
+
+```ts
+authRouter.route('/signin').post(signin);
+```
+
 ## 47. Json Web Token (JWT)
 
 - npm install jsonwebtoken types/jsonwebtoken
@@ -30,7 +76,7 @@ res.status(200).json({ sucess: true, token });
 // @ desc     signUp new user
 // @ route    POST /api/v1/sign-up
 // @ access   Public
-export const signUpNewUser = asyncHandler(
+export const signupNewUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({ sucess: true });
   }
@@ -45,7 +91,7 @@ export const signUpNewUser = asyncHandler(
 export const authRouter = express.Router();
 
 // api/v1/auth/
-authRouter.route('/').post(signUpNewUser);
+authRouter.route('/').post(signupNewUser);
 ```
 
 ---
