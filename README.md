@@ -1,3 +1,11 @@
+## 51. Postman test tab for easier Authorization
+
+- test tab
+  <img src="./assets/postman-test-tab.png">
+
+- auth tab
+  <img src="./assets/postman-auth-tab.png">
+
 ## 50. Auth Protect Middleware
 
 /middlewraes/protect
