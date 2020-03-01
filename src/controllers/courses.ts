@@ -5,7 +5,7 @@ import { asyncHandler } from '../middlewares/async-handler';
 import { ErrorResponse } from '../helpers/ErrorResponse';
 import { ReqWithAdvancedResults } from '../middlewares/advanced-results';
 
-import { ReqWithUser } from '../middlewares/protect';
+import { ReqWithUser } from '../middlewares/auth';
 
 // * C
 // @ desc     create course

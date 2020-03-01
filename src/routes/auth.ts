@@ -1,7 +1,7 @@
 import express from 'express';
 //
 import { signupNewUser, signin, getMyInfo } from '../controllers/auth';
-import { protect } from '../middlewares/protect';
+import { protect } from '../middlewares/auth';
 
 export const authRouter = express.Router();
 

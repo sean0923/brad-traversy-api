@@ -1,3 +1,6 @@
+## 52. Role Authorization
+
+
 ## 51. Postman test tab for easier Authorization
 
 - test tab
@@ -8,7 +11,7 @@
 
 ## 50. Auth Protect Middleware
 
-/middlewraes/protect
+/middlewraes/auth
 
 ```ts
 export const protect = asyncHandler(async (req: ReqWithUser, res: Response, next: NextFunction) => {

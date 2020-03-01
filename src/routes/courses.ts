@@ -9,7 +9,7 @@ import {
 
 import { advancedResults } from '../middlewares/advanced-results';
 import { CourseModel } from '../models/Course';
-import { protect } from '../middlewares/protect';
+import { protect, authorize } from '../middlewares/auth';
 
 // ! mergeParams is required so that redirect from bootcamps/:bootcampId/courses contains req.params
 export const coursesRouter = express.Router({ mergeParams: true });
@@ -25,4 +25,4 @@ coursesRouter
   .route('/:id')
   .get(getCourse)
   .patch(updateCourse)
-  .delete(deleteCourse);
+  .delete(protect, authorize('admin', 'publisher') as any, deleteCourse);

@@ -5,7 +5,7 @@ import { asyncHandler } from '../middlewares/async-handler';
 // import { ReqWithAdvancedResults } from '../middlewares/advanced-results';
 import { UserModel } from '../models/User';
 import { resSendJwt } from './auth.utils';
-import { ReqWithUser } from '../middlewares/protect';
+import { ReqWithUser } from '../middlewares/auth';
 
 // * C (Sign Up)
 // @ desc     signUp new user

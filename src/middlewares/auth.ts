@@ -51,3 +51,19 @@ export const protect = asyncHandler(async (req: ReqWithUser, res: Response, next
     return next(error);
   }
 });
+
+export const authorize = (...roles: string[]) => (
+  req: ReqWithUser,
+  res: Response,
+  next: NextFunction
+) => {
+  const isAuthorized = roles.includes(req.user.role);
+
+  if (!isAuthorized) {
+    return next(
+      new ErrorResponse(`user role ${req.user.role} is not authorize to perform this action`, 403)
+    );
+  }
+
+  next();
+};
