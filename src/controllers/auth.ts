@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import * as dateFns from 'date-fns';
 
 import { ErrorResponse } from '../helpers/ErrorResponse';
 import { asyncHandler } from '../middlewares/async-handler';
 // import { ReqWithAdvancedResults } from '../middlewares/advanced-results';
-import { UserModel, User } from '../models/User';
+import { UserModel } from '../models/User';
+import { resSendJwt } from './auth.utils';
+import { ReqWithUser } from '../middlewares/protect';
 
 // * C (Sign Up)
 // @ desc     signUp new user
@@ -42,26 +43,11 @@ export const signin = asyncHandler(async (req: Request, res: Response, next: Nex
   resSendJwt(res, user);
 });
 
-const resSendJwt = (res: Response, user: User) => {
-  const token = user.getJwtWithExpireTime();
-
-  const option: any = {
-    expires: Date.now(),
-    httpOnly: true,
-  };
-
-  if (process.env.NODE_ENV === 'production') {
-    option.secure = true;
-  }
-
-  const cookieExpireDays = parseInt(process.env.COOKIE_EXPIRE_DAYS as string);
-
-  res
-    .status(200)
-    .cookie('token', token, {
-      expires: dateFns.addDays(new Date(), cookieExpireDays),
-      httpOnly: true,
-      ...(process.env.NODE_ENV === 'production' && { secure: true }),
-    })
-    .json({ sucess: true, token });
-};
+// * R (Get My Info)
+// @ desc     my-info
+// @ route    GET /api/v1/auth/my-info
+// @ access   Private
+export const getMyInfo = asyncHandler((req: ReqWithUser, res: Response, next: NextFunction) => {
+  console.log('req: ', req.user);
+  res.status(200).send({ success: true, date: req.user });
+});

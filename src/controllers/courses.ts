@@ -1,27 +1,31 @@
-import { RequestHandler } from 'express';
+import { RequestHandler,, NextFunction, Response } from 'express';
 import { CourseModel } from '../models/Course';
 import { BootcampModel } from '../models/Bootcamp';
 import { asyncHandler } from '../middlewares/async-handler';
 import { ErrorResponse } from '../helpers/ErrorResponse';
 import { ReqWithAdvancedResults } from '../middlewares/advanced-results';
 
+import { ReqWithUser } from '../middlewares/protect';
+
 // * C
 // @ desc     create course
 // @ route    POST /api/v1/bootcamps/:bootcampsId/courses
 // @ access   Private (only bootcamp owner should be able to create)
-export const createCourse: RequestHandler = asyncHandler(async (req, res, next) => {
-  const bootcamp = await BootcampModel.findById(req.params.bootcampId);
+export const createCourse = asyncHandler(
+  async (req: ReqWithUser, res: Response, next: NextFunction) => {
+    const bootcamp = await BootcampModel.findById(req.params.bootcampId);
 
-  if (!bootcamp) {
-    return next(new ErrorResponse(`Bootcamp id ${req.params.bootcampId} does not exist`, 404));
+    if (!bootcamp) {
+      return next(new ErrorResponse(`Bootcamp id ${req.params.bootcampId} does not exist`, 404));
+    }
+
+    req.body.bootcampId = req.params.bootcampId;
+
+    const course = await CourseModel.create(req.body);
+
+    res.status(200).json({ sucess: true, data: course });
   }
-
-  req.body.bootcampId = req.params.bootcampId;
-
-  const course = await CourseModel.create(req.body);
-
-  res.status(200).json({ sucess: true, data: course });
-});
+);
 
 // * R (all)
 // @ desc     Get all courses

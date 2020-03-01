@@ -1,5 +1,7 @@
 import express from 'express';
-import { signupNewUser, signin } from '../controllers/auth';
+//
+import { signupNewUser, signin, getMyInfo } from '../controllers/auth';
+import { protect } from '../middlewares/protect';
 
 export const authRouter = express.Router();
 
@@ -7,3 +9,5 @@ export const authRouter = express.Router();
 authRouter.route('/signup-new-user').post(signupNewUser);
 
 authRouter.route('/signin').post(signin);
+
+authRouter.route('/my-info').get(protect, getMyInfo);

@@ -9,6 +9,7 @@ import {
 
 import { advancedResults } from '../middlewares/advanced-results';
 import { CourseModel } from '../models/Course';
+import { protect } from '../middlewares/protect';
 
 // ! mergeParams is required so that redirect from bootcamps/:bootcampId/courses contains req.params
 export const coursesRouter = express.Router({ mergeParams: true });
@@ -18,7 +19,7 @@ export const coursesRouter = express.Router({ mergeParams: true });
 coursesRouter
   .route('/')
   .get(advancedResults(CourseModel, { populate: 'bootcampId', select: 'name' }) as any, getCourses)
-  .post(createCourse);
+  .post(protect, createCourse);
 
 coursesRouter
   .route('/:id')

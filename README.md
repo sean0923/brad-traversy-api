@@ -1,3 +1,10 @@
+## 50. Auth Protect Middleware
+
+/middlewraes/protect
+
+- /api/vi/auth/me
+- get me route to get my info
+
 ## 49. Sending JWT in a Cookie
 
 npm install cookie-parser
