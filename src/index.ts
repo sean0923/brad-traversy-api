@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import expressFileupload from 'express-fileupload';
+import cookieParser from 'cookie-parser';
 import path from 'path';
 // import moduleName from './public/uploads'
 
@@ -37,6 +38,7 @@ app.use(express.static(path.resolve(__dirname + '/./public')));
 
 // File upload middleware
 app.use(expressFileupload());
+app.use(cookieParser());
 
 app.use(express.json());
 app.use('/api/v1/bootcamps', bootcampsRouter);

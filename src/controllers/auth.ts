@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
+import * as dateFns from 'date-fns';
+
 import { ErrorResponse } from '../helpers/ErrorResponse';
 import { asyncHandler } from '../middlewares/async-handler';
 // import { ReqWithAdvancedResults } from '../middlewares/advanced-results';
-import { UserModel } from '../models/User';
+import { UserModel, User } from '../models/User';
 
 // * C (Sign Up)
 // @ desc     signUp new user
@@ -37,7 +39,29 @@ export const signin = asyncHandler(async (req: Request, res: Response, next: Nex
     return next(new ErrorResponse('Invalid user credentials', 400));
   }
 
+  resSendJwt(res, user);
+});
+
+const resSendJwt = (res: Response, user: User) => {
   const token = user.getJwtWithExpireTime();
 
-  res.status(200).json({ sucess: true, token });
-});
+  const option: any = {
+    expires: Date.now(),
+    httpOnly: true,
+  };
+
+  if (process.env.NODE_ENV === 'production') {
+    option.secure = true;
+  }
+
+  const cookieExpireDays = parseInt(process.env.COOKIE_EXPIRE_DAYS as string);
+
+  res
+    .status(200)
+    .cookie('token', token, {
+      expires: dateFns.addDays(new Date(), cookieExpireDays),
+      httpOnly: true,
+      ...(process.env.NODE_ENV === 'production' && { secure: true }),
+    })
+    .json({ sucess: true, token });
+};

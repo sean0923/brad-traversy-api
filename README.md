@@ -1,5 +1,34 @@
 ## 49. Sending JWT in a Cookie
 
+npm install cookie-parser
+npm install date-fns
+
+```ts
+const resSendJwt = (res: Response, user: User) => {
+  const token = user.getJwtWithExpireTime();
+
+  const option: any = {
+    expires: Date.now(),
+    httpOnly: true,
+  };
+
+  if (process.env.NODE_ENV === 'production') {
+    option.secure = true;
+  }
+
+  const cookieExpireDays = parseInt(process.env.COOKIE_EXPIRE_DAYS as string);
+
+  res
+    .status(200)
+    .cookie('token', token, {
+      expires: dateFns.addDays(new Date(), cookieExpireDays),
+      httpOnly: true,
+      ...(process.env.NODE_ENV === 'production' && { secure: true }),
+    })
+    .json({ sucess: true, token });
+};
+```
+
 ## 48. Signin (check password --> return JWT)
 
 - check password
