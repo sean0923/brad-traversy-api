@@ -67,10 +67,11 @@ export const forgotPassword = asyncHandler(
 
     try {
       await sendEmail({ email: user.email, subject: 'Subject', text: emailBody });
-      // res.status(200).send({ success: true, resetToken });
       res.status(200).send({ success: true, text: 'Email sent' });
     } catch (error) {
-      console.log('error: ', error);
+      user.resetPasswordExpire = null;
+      user.resetPasswordToken = null;
+      await user.save({ validateBeforeSave: false }); // so that reset info is not hanging
       return next(new ErrorResponse(`Something wrong happen while sending email`, 500));
     }
   }

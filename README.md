@@ -1,6 +1,71 @@
 ## 56. Forgot password - send email with `mailtrap` and `nodemailer`
+
 - npm install nodemailer
 
+- send email helper function
+
+```ts
+export const sendEmail = async (options: Options) => {
+  // create reusable transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_USER_EMAIL as string),
+    auth: {
+      user: process.env.SMTP_USER_EMAIL, // generated ethereal user
+      pass: process.env.SMTP_PASSWORD, // generated ethereal password
+    },
+  });
+
+  const message = {
+    from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM_EMAIL}>`, // sender address
+    to: options.email,
+    subject: options.subject, // Subject line
+    text: options.text, // plain text body
+  };
+
+  // send mail with defined transport object
+  const info = await transporter.sendMail(message);
+
+  console.log('info: ', info);
+};
+```
+
+- add to forgot password controller
+
+```ts
+// * (ForgotPassword)
+// @ desc     forgot password
+// @ route    GET /api/v1/auth/forgot-password
+// @ access   Public
+export const forgotPassword = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await UserModel.findOne({ email: req.body.email });
+
+    if (!user) {
+      return next(new ErrorResponse(`No user with email ${req.body.email}`, 400));
+    }
+
+    const resetToken = user.getResetToken();
+
+    // saving hashed restPasswordToken
+    await user.save({ validateBeforeSave: false }); // name, ... are not required
+
+    const currentHost = req.get('host');
+    const resetUrl = `${req.protocol}://${currentHost}/api/v1/auth/reset-password/${resetToken}`;
+    const emailBody = `Please send PATCH request to url: ${resetUrl}`;
+
+    try {
+      await sendEmail({ email: user.email, subject: 'Subject', text: emailBody });
+      res.status(200).send({ success: true, text: 'Email sent' });
+    } catch (error) {
+      user.resetPasswordExpire = null;
+      user.resetPasswordToken = null;
+      await user.save({ validateBeforeSave: false }); // so that reset info is not hanging
+      return next(new ErrorResponse(`Something wrong happen while sending email`, 500));
+    }
+  }
+);
+```
 
 ## 55. Forgot password return resetToken
 
