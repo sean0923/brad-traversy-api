@@ -11,11 +11,15 @@ interface MustHaveKey_userId {
 export function checkOwnerBeforeDbOperation(
   instance: MustHaveKey_userId | null,
   instanceName: 'bootcamp' | 'course',
-  dbOperationName: 'update' | 'upload photo' | 'delete',
+  dbOperationName: 'update' | 'upload photo' | 'delete' | 'create',
   req: ReqWithUser,
   next: NextFunction
 ) {
-  const notOwner = (instance as any).userId.toString() !== req.user.id;
+  if (!instance) {
+    return next(new ErrorResponse(`No instance!!!`, 400));
+  }
+
+  const notOwner = instance.userId.toString() !== req.user.id;
   const notAdmin = req.user.role !== 'admin';
 
   if (notOwner && notAdmin) {

@@ -1,3 +1,30 @@
+## 54. Only let course owner to change course info
+
+- make sure to add userId to Course Schema
+- example
+
+```ts
+export const createCourse = asyncHandler(
+  async (req: ReqWithUser, res: Response, next: NextFunction) => {
+    const bootcamp = await BootcampModel.findById(req.params.bootcampId);
+    console.log('bootcamp: ', bootcamp);
+
+    if (!bootcamp) {
+      return next(new ErrorResponse(`Bootcamp id ${req.params.bootcampId} does not exist`, 404));
+    }
+
+    checkOwnerBeforeDbOperation(bootcamp, 'course', 'create', req, next);
+
+    req.body.bootcampId = req.params.bootcampId;
+    req.body.userId = req.user.id;
+
+    const course = await CourseModel.create(req.body);
+
+    res.status(200).json({ sucess: true, data: course });
+  }
+);
+```
+
 ## 54. Only let owner to change bootcamp info
 
 In update bootcamp.

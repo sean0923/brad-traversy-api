@@ -20,7 +20,7 @@ export interface Course extends mongoose.Document {
   minimumSkill: MinimumSkill;
   scholarshipsAvailable: boolean;
   bootcampId: string;
-  user: string;
+  userId: mongoose.Types.ObjectId;
   createdAt: Date;
 }
 
@@ -55,6 +55,11 @@ const CourseSchema = new mongoose.Schema<Course>({
   bootcampId: {
     type: mongoose.Types.ObjectId,
     ref: 'Bootcamp',
+    required: true,
+  },
+  userId: {
+    type: mongoose.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
   createdAt: {
