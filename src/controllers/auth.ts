@@ -43,6 +43,27 @@ export const signin = asyncHandler(async (req: Request, res: Response, next: Nex
   resSendJwt(res, user);
 });
 
+// * (ForgotPassword)
+// @ desc     forgot password
+// @ route    GET /api/v1/auth/forgot-password
+// @ access   Public
+export const forgotPassword = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await UserModel.findOne({ email: req.body.email });
+
+    if (!user) {
+      return next(new ErrorResponse(`No user with email ${req.body.email}`, 400));
+    }
+
+    const resetToken = user.getResetToken();
+
+    // saving hashed restPasswordToken
+    await user.save({ validateBeforeSave: false }); // name, ... are not required
+
+    res.status(200).send({ success: true, resetToken });
+  }
+);
+
 // * R (Get My Info)
 // @ desc     my-info
 // @ route    GET /api/v1/auth/my-info

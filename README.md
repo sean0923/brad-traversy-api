@@ -1,3 +1,59 @@
+## 55. Forgot password return resetToken
+
+Since forgot password req body only takes email, we need to handle pre save case where there is no password
+
+```ts
+UserSchema.pre<User>('save', async function(next) {
+  if (!this.password) {
+    next(); // for forgot password
+  }
+```
+
+get non-hashed and hashed reset token by using native node lb `crypto`
+
+```ts
+UserSchema.methods.getResetToken = function() {
+  const resetToken = crypto.randomBytes(20).toString('hex');
+
+  const hashedResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  this.resetPasswordToken = hashedResetToken;
+  this.resetPasswordExpire = dateFns.addMinutes(new Date(), 10);
+
+  return resetToken;
+};
+```
+
+---
+
+Return non-hashed reset token as response and save hashed token in user
+
+```ts
+// * (ForgotPassword)
+// @ desc     forgot password
+// @ route    GET /api/v1/auth/forgot-password
+// @ access   Public
+export const forgotPassword = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await UserModel.findOne({ email: req.body.email });
+
+    if (!user) {
+      return next(new ErrorResponse(`No user with email ${req.body.email}`, 400));
+    }
+
+    const resetToken = user.getResetToken();
+
+    // saving hashed restPasswordToken
+    await user.save({ validateBeforeSave: false }); // name, ... are not required
+
+    res.status(200).send({ success: true, resetToken });
+  }
+);
+```
+
 ## 54. Only let course owner to change course info
 
 - make sure to add userId to Course Schema

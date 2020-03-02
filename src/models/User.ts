@@ -1,6 +1,8 @@
+import crypto from 'crypto';
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import * as dateFns from 'date-fns';
 
 // assigning admin is only possible through db UI
 type Role = 'user' | 'publisher' | 'admin';
@@ -16,6 +18,7 @@ export interface User extends mongoose.Document {
   //
   getJwtWithExpireTime: () => string;
   checkPassword: (password: string) => Promise<boolean>;
+  getResetToken: () => string;
 }
 
 // interface Method {
@@ -52,6 +55,10 @@ const UserSchema = new mongoose.Schema<User>({
 });
 
 UserSchema.pre<User>('save', async function(next) {
+  if (!this.password) {
+    next(); // for forgot password
+  }
+
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(this.password, salt);
   this.password = hashedPassword;
@@ -68,6 +75,20 @@ UserSchema.methods.getJwtWithExpireTime = function() {
 
 UserSchema.methods.checkPassword = function(enteredPassword: string) {
   return bcrypt.compare(enteredPassword, this.password);
+};
+
+UserSchema.methods.getResetToken = function() {
+  const resetToken = crypto.randomBytes(20).toString('hex');
+
+  const hashedResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  this.resetPasswordToken = hashedResetToken;
+  this.resetPasswordExpire = dateFns.addMinutes(new Date(), 10);
+
+  return resetToken;
 };
 
 export const UserModel = mongoose.model<User>('User', UserSchema);
