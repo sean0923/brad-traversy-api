@@ -6,6 +6,7 @@ import { asyncHandler } from '../middlewares/async-handler';
 import { UserModel } from '../models/User';
 import { resSendJwt } from './auth.utils';
 import { ReqWithUser } from '../middlewares/auth';
+import { sendEmail } from '../helpers/send-email';
 
 // * C (Sign Up)
 // @ desc     signUp new user
@@ -60,7 +61,18 @@ export const forgotPassword = asyncHandler(
     // saving hashed restPasswordToken
     await user.save({ validateBeforeSave: false }); // name, ... are not required
 
-    res.status(200).send({ success: true, resetToken });
+    const currentHost = req.get('host');
+    const resetUrl = `${req.protocol}://${currentHost}/api/v1/auth/reset-password/${resetToken}`;
+    const emailBody = `Please send PATCH request to url: ${resetUrl}`;
+
+    try {
+      await sendEmail({ email: user.email, subject: 'Subject', text: emailBody });
+      // res.status(200).send({ success: true, resetToken });
+      res.status(200).send({ success: true, text: 'Email sent' });
+    } catch (error) {
+      console.log('error: ', error);
+      return next(new ErrorResponse(`Something wrong happen while sending email`, 500));
+    }
   }
 );
 

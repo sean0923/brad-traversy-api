@@ -1,3 +1,7 @@
+## 56. Forgot password - send email with `mailtrap` and `nodemailer`
+- npm install nodemailer
+
+
 ## 55. Forgot password return resetToken
 
 Since forgot password req body only takes email, we need to handle pre save case where there is no password
