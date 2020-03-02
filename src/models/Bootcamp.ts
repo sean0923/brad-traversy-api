@@ -34,7 +34,7 @@ interface Bootcamp extends mongoose.Document {
   averageCost: number;
   photo: string;
   createdAt: Date;
-  userId: string;
+  userId: mongoose.Types.ObjectId;
 }
 
 const BootcampSchema = new mongoose.Schema(

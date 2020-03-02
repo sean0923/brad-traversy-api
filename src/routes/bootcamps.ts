@@ -36,8 +36,8 @@ bootcampsRouter
 bootcampsRouter
   .route('/:id')
   .get(getBootcamp)
-  .patch(updateBootcamp)
-  .delete(deleteBootcamp);
+  .patch(protect, updateBootcamp)
+  .delete(protect, deleteBootcamp);
 
 // bootcampsRouter.get('/', (req, res) => {
 //   res.send('a');

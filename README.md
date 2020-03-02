@@ -1,3 +1,51 @@
+## 54. Only let owner to change bootcamp info
+
+In update bootcamp.
+
+- find bootcamp by bootcamp id
+- get user id from bootcamp = bootcamp owner user id
+- req.user.\_id !== bootcamp owner user id then reject
+- if user is not owner or not admin then they cannot udate or delete bootcamp
+
+- need to set `protect` middleware to update and delete in order to access req.user
+
+---
+
+typeof user.bootcampId = object
+typeof user.id = string
+typeof user.\_id = object
+
+---
+
+- implement check-owner-before-db-operation
+
+```ts
+interface MustHaveKey_userId {
+  userId: mongoose.Types.ObjectId;
+  [key: string]: any;
+}
+
+export function checkOwnerBeforeDbOperation(
+  instance: MustHaveKey_userId | null,
+  instanceName: 'bootcamp' | 'course',
+  dbOperationName: 'update' | 'upload photo' | 'delete',
+  req: ReqWithUser,
+  next: NextFunction
+) {
+  const notOwner = (instance as any).userId.toString() !== req.user.id;
+  const notAdmin = req.user.role !== 'admin';
+
+  if (notOwner && notAdmin) {
+    return next(
+      new ErrorResponse(
+        `User id: ${req.user.id} is not authorized to ${dbOperationName} this ${instanceName}`,
+        401
+      )
+    );
+  }
+}
+```
+
 ## 53. Set up bootcamp and user relationship (and update seed.ts)
 
 ... forgot what i did here ...
