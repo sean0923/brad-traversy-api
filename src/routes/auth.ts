@@ -6,6 +6,8 @@ import {
   getMyInfo,
   forgotPassword,
   resetPassword,
+  updateMyInfo,
+  updateMyPassword,
 } from '../controllers/auth';
 
 import { protect } from '../middlewares/auth';
@@ -26,3 +28,5 @@ authRouter.route('/reset-password/:resetPasswordToken').patch(resetPassword);
 
 // api/v1/auth/my-info
 authRouter.route('/my-info').get(protect, getMyInfo as any);
+authRouter.route('/update-my-info').patch(protect, updateMyInfo);
+authRouter.route('/update-my-password').patch(protect, updateMyPassword);

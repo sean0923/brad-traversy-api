@@ -26,7 +26,7 @@ const getToken = (req: Request) => {
   return token;
 };
 
-export const protect = asyncHandler(async (req: ReqWithUser, res: Response, next: NextFunction) => {
+export const protect = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const token = getToken(req);
 
   if (!token) {
@@ -36,7 +36,7 @@ export const protect = asyncHandler(async (req: ReqWithUser, res: Response, next
   const decodedJwt = jwt.verify(token, process.env.JWT_SECRET as string);
 
   try {
-    const user = await UserModel.findById((decodedJwt as any).id);
+    const user = await UserModel.findById((decodedJwt as any).id).select('+password');
 
     if (!user) {
       return next(new ErrorResponse('User does not exist', 400));
@@ -44,7 +44,8 @@ export const protect = asyncHandler(async (req: ReqWithUser, res: Response, next
 
     // from this line user will be available at req
     // in otherwords, req.user will be availble for all protected routes
-    req.user = user;
+    (req as any).user = user;
+    // req as any because before this line user should not be available
 
     next();
   } catch (error) {
