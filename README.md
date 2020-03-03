@@ -1,3 +1,18 @@
+## 57. Reset password ()
+
+---
+
+If you define something undefined then mongoose does not save to DB
+
+ex) both key will be not saved at DB
+
+```ts
+user.resetPasswordToken = undefined;
+user.resetPasswordExpire = undefined;
+```
+
+---
+
 ## 56. Forgot password - send email with `mailtrap` and `nodemailer`
 
 - npm install nodemailer

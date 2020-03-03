@@ -12,8 +12,8 @@ export interface User extends mongoose.Document {
   email: string;
   password: string;
   role: Role;
-  resetPasswordToken: string | null;
-  resetPasswordExpire: Date | null;
+  resetPasswordToken: string | undefined;
+  resetPasswordExpire: Date | undefined;
   createdAt: Date;
   //
   getJwtWithExpireTime: () => string;

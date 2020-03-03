@@ -13,7 +13,7 @@ export interface ReqWithUser extends Request {
 }
 
 const getToken = (req: Request) => {
-  let token: string | null = null;
+  let token: string | undefined = undefined;
 
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1];
