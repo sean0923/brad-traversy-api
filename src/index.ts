@@ -20,6 +20,7 @@ import { connectDB } from './helpers/db';
 import { bootcampsRouter } from './routes/bootcamps';
 import { coursesRouter } from './routes/courses';
 import { authRouter } from './routes/auth';
+import { usersRouter } from './routes/users';
 
 // connect to mongo DB
 connectDB();
@@ -44,6 +45,7 @@ app.use(express.json());
 app.use('/api/v1/bootcamps', bootcampsRouter);
 app.use('/api/v1/courses', coursesRouter);
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/users', usersRouter);
 // ! IMPORTANT ERR HANDLER MUST BE PLACED AFTER ROUTE STUFF
 app.use(errorHandler);
 

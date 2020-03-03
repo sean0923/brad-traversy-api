@@ -6,7 +6,7 @@ import { asyncHandler } from '../middlewares/async-handler';
 import { geocode } from '../helpers/geocode';
 import { UploadedFile } from 'express-fileupload';
 // import moduleName from '../public/uploads'
-import { ReqWithAdvancedResults } from '../middlewares/advanced-results';
+import { ResWithAdvanceResults } from '../middlewares/advanced-results';
 import { ReqWithUser } from '../middlewares/auth';
 import { checkOwnerBeforeDbOperation } from '../helpers/check-owner-before-db-operation';
 
@@ -35,8 +35,8 @@ export const createBootcamp = asyncHandler(
 // @ route    GET /api/v1/bootcamps
 // @ access   Public
 export const getBootcamps = asyncHandler(
-  async (req: ReqWithAdvancedResults, res: Response, next: NextFunction) => {
-    res.status(200).json(req.advancedResults);
+  async (req: Request, res: ResWithAdvanceResults, next: NextFunction) => {
+    res.status(200).json(res.advancedResults);
   }
 );
 

@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 
 import { ErrorResponse } from '../helpers/ErrorResponse';
 import { asyncHandler } from '../middlewares/async-handler';
-// import { ReqWithAdvancedResults } from '../middlewares/advanced-results';
 import { UserModel } from '../models/User';
 import { resSendJwt } from './auth.utils';
 import { ReqWithUser } from '../middlewares/auth';

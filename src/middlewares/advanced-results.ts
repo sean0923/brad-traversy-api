@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { Model } from 'mongoose';
 
-export interface ReqWithAdvancedResults extends Request {
+export interface ResWithAdvanceResults extends Response {
   advancedResults: {
     success: boolean;
     data: any;
@@ -14,7 +14,7 @@ export interface ReqWithAdvancedResults extends Request {
 }
 
 export const advancedResults = (model: Model<any>, populate: any) => async (
-  req: ReqWithAdvancedResults,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -66,7 +66,7 @@ export const advancedResults = (model: Model<any>, populate: any) => async (
 
   const data = await query.exec();
 
-  req.advancedResults = {
+  (res as any).advancedResults = {
     success: true,
     count: data.length,
     pagination,

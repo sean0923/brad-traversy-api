@@ -3,7 +3,7 @@ import { CourseModel } from '../models/Course';
 import { BootcampModel } from '../models/Bootcamp';
 import { asyncHandler } from '../middlewares/async-handler';
 import { ErrorResponse } from '../helpers/ErrorResponse';
-import { ReqWithAdvancedResults } from '../middlewares/advanced-results';
+import { ResWithAdvanceResults } from '../middlewares/advanced-results';
 
 import { ReqWithUser } from '../middlewares/auth';
 import { checkOwnerBeforeDbOperation } from '../helpers/check-owner-before-db-operation';
@@ -38,7 +38,7 @@ export const createCourse = asyncHandler(
 // @ route    GET /api/v1/:bootcampId/courses
 // @ access   Public
 export const getCourses = asyncHandler(
-  async (req: ReqWithAdvancedResults, res: Response, next: NextFunction) => {
+  async (req: Request, res: ResWithAdvanceResults, next: NextFunction) => {
     let query = null;
 
     if (req.params.bootcampId) {
@@ -49,7 +49,7 @@ export const getCourses = asyncHandler(
 
       res.status(200).json({ sucess: true, count: allCourses.length, data: allCourses });
     } else {
-      res.status(200).json(req.advancedResults);
+      res.status(200).json(res.advancedResults);
     }
   }
 );

@@ -74,7 +74,6 @@ UserSchema.methods.getJwtWithExpireTime = function() {
 };
 
 UserSchema.methods.asyncCheckPassword = function(enteredPassword: string) {
-  console.log('this.password: ', this.password);
   return bcrypt.compare(enteredPassword, this.password);
 };
 

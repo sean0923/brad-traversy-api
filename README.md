@@ -1,7 +1,28 @@
-## 58. Update my info and password 
+## 59. CRUD users API for admin users
 
 ```ts
+export const usersRouter = express.Router();
 
+// * this way, protect and authorize is applied to all router below ---------
+usersRouter.use(protect);
+usersRouter.use(authorize('admin') as any);
+// * ------------------------------------------------------------------------
+
+usersRouter
+  .route('/')
+  .get(advancedResults(UserModel, 'users') as any, getUsers)
+  .post(createUser);
+
+usersRouter
+  .route('/:id')
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
+```
+
+## 58. Update my info and password
+
+```ts
 // * U
 // @ desc     update my info (name, email)
 // @ route    PATCH /api/v1/auth/update-my-info
@@ -556,7 +577,7 @@ export const UserModel = mongoose.model<User>('User', UserSchema);
 ## 44. Middleware that can handle select, sort, page, limit, populate (advanced results middleware)
 
 ```ts
-export interface ReqWithAdvancedResults extends Request {
+export interface ResWithAdvancedResults extends Request {
   advancedResults: {
     success: boolean;
     data: any;
@@ -569,8 +590,8 @@ export interface ReqWithAdvancedResults extends Request {
 }
 
 export const advancedResults = (model: Model<any>, populate: any) => async (
-  req: ReqWithAdvancedResults,
-  res: Response,
+  req: Request,
+  res: ResWithAdvancedResults,
   next: NextFunction
 ) => {
   const queryStr = JSON.stringify(req.query);
