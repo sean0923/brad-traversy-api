@@ -13,6 +13,38 @@ user.resetPasswordExpire = undefined;
 
 ---
 
+```ts
+// * U (Reset password)
+// @ desc     forgot password
+// @ route    PATCH /api/v1/auth/reset-password/:resetPasswordToken
+// @ access   Public
+export const resetPassword = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { resetPasswordToken } = req.params;
+    const hasedResetPasswordToken = crypto
+      .createHash('sha256')
+      .update(resetPasswordToken)
+      .digest('hex');
+
+    const user = await UserModel.findOne({ resetPasswordToken: hasedResetPasswordToken });
+
+    if (!user) {
+      return next(new ErrorResponse('Invalid resetPasswordToken', 400));
+    }
+
+    const { newPassword } = req.body;
+
+    user.password = newPassword;
+    user.resetPasswordExpire = undefined;
+    user.resetPasswordToken = undefined;
+
+    await user.save();
+
+    resSendJwt(res, user);
+  }
+);
+```
+
 ## 56. Forgot password - send email with `mailtrap` and `nodemailer`
 
 - npm install nodemailer
