@@ -155,6 +155,10 @@ export const updateMyPassword = asyncHandler(
       return next(new ErrorResponse('Wrong password', 400));
     }
 
+    if (!newPassword) {
+      return next(new ErrorResponse('new password is required', 400));
+    }
+
     const user = req.user;
     user.password = newPassword;
 

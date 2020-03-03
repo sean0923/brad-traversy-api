@@ -1,3 +1,57 @@
+## 58. Update my info and password 
+
+```ts
+
+// * U
+// @ desc     update my info (name, email)
+// @ route    PATCH /api/v1/auth/update-my-info
+// @ access   Private
+export const updateMyInfo = asyncHandler(
+  async (req: ReqWithUser, res: Response, next: NextFunction) => {
+    const { name, email } = req.body;
+
+    if (!name || !email) {
+      return next(new ErrorResponse('name and email are required', 400));
+    }
+
+    const user = req.user;
+    user.name = name;
+    user.email = email;
+
+    await user.save({ validateBeforeSave: true });
+
+    resSendJwt(res, user);
+  }
+);
+
+// * U
+// @ desc     update my password
+// @ route    PATCH /api/v1/auth/update-my-password
+// @ access   Private
+export const updateMyPassword = asyncHandler(
+  async (req: ReqWithUser, res: Response, next: NextFunction) => {
+    const { currentPassword, newPassword } = req.body;
+
+    const wrongPassword = !(await req.user.asyncCheckPassword(currentPassword));
+
+    if (wrongPassword) {
+      return next(new ErrorResponse('Wrong password', 400));
+    }
+
+    if (!newPassword) {
+      return next(new ErrorResponse('new password is required', 400));
+    }
+
+    const user = req.user;
+    user.password = newPassword;
+
+    await user.save({ validateBeforeSave: true });
+
+    resSendJwt(res, user);
+  }
+);
+```
+
 ## 57. Reset password ()
 
 ---
