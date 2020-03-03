@@ -17,7 +17,7 @@ export interface User extends mongoose.Document {
   createdAt: Date;
   //
   getJwtWithExpireTime: () => string;
-  checkPassword: (password: string) => Promise<boolean>;
+  asyncCheckPassword: (password: string) => Promise<boolean>;
   getResetPasswordToken: () => string;
 }
 
@@ -73,7 +73,7 @@ UserSchema.methods.getJwtWithExpireTime = function() {
   return token;
 };
 
-UserSchema.methods.checkPassword = function(enteredPassword: string) {
+UserSchema.methods.asyncCheckPassword = function(enteredPassword: string) {
   return bcrypt.compare(enteredPassword, this.password);
 };
 

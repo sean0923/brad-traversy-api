@@ -35,7 +35,7 @@ export const signin = asyncHandler(async (req: Request, res: Response, next: Nex
     return next(new ErrorResponse('Invalid user credentials', 400));
   }
 
-  const isCorrectPassword = await user.checkPassword(password);
+  const isCorrectPassword = await user.asyncCheckPassword(password);
 
   if (!isCorrectPassword) {
     return next(new ErrorResponse('Invalid user credentials', 400));
