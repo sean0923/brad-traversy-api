@@ -60,7 +60,7 @@ export const forgotPassword = asyncHandler(
       return next(new ErrorResponse(`No user with email ${req.body.email}`, 400));
     }
 
-    const resetToken = user.getResetToken();
+    const resetToken = user.getResetPasswordToken();
 
     // saving hashed restPasswordToken
     await user.save({ validateBeforeSave: false }); // name, ... are not required
@@ -96,7 +96,7 @@ UserSchema.pre<User>('save', async function(next) {
 get non-hashed and hashed reset token by using native node lb `crypto`
 
 ```ts
-UserSchema.methods.getResetToken = function() {
+UserSchema.methods.getResetPasswordToken = function() {
   const resetToken = crypto.randomBytes(20).toString('hex');
 
   const hashedResetToken = crypto
@@ -128,7 +128,7 @@ export const forgotPassword = asyncHandler(
       return next(new ErrorResponse(`No user with email ${req.body.email}`, 400));
     }
 
-    const resetToken = user.getResetToken();
+    const resetToken = user.getResetPasswordToken();
 
     // saving hashed restPasswordToken
     await user.save({ validateBeforeSave: false }); // name, ... are not required

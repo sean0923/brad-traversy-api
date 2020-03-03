@@ -18,7 +18,7 @@ export interface User extends mongoose.Document {
   //
   getJwtWithExpireTime: () => string;
   checkPassword: (password: string) => Promise<boolean>;
-  getResetToken: () => string;
+  getResetPasswordToken: () => string;
 }
 
 // interface Method {
@@ -77,18 +77,18 @@ UserSchema.methods.checkPassword = function(enteredPassword: string) {
   return bcrypt.compare(enteredPassword, this.password);
 };
 
-UserSchema.methods.getResetToken = function() {
-  const resetToken = crypto.randomBytes(20).toString('hex');
+UserSchema.methods.getResetPasswordToken = function() {
+  const resetPasswordToken = crypto.randomBytes(20).toString('hex');
 
   const hashedResetToken = crypto
     .createHash('sha256')
-    .update(resetToken)
+    .update(resetPasswordToken)
     .digest('hex');
 
   this.resetPasswordToken = hashedResetToken;
   this.resetPasswordExpire = dateFns.addMinutes(new Date(), 10);
 
-  return resetToken;
+  return resetPasswordToken;
 };
 
 export const UserModel = mongoose.model<User>('User', UserSchema);
