@@ -1,3 +1,8 @@
+## 60. ReviewModel and get reviews
+
+- similar to get courses
+
+
 ## 59. CRUD users API for admin users
 
 ```ts

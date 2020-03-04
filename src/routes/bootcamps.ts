@@ -14,11 +14,15 @@ import { advancedResults } from '../middlewares/advanced-results';
 import { coursesRouter } from './courses';
 import { BootcampModel } from '../models/Bootcamp';
 import { protect, authorize } from '../middlewares/auth';
+import { reviewRouter } from './reviews';
 
 export const bootcampsRouter = express.Router();
 
 // Re-route to courses
 bootcampsRouter.use('/:bootcampId/courses', coursesRouter);
+
+// Re-route to reviews
+bootcampsRouter.use('/:bootcampId/reviews', reviewRouter);
 
 // get bootcamp within radius
 bootcampsRouter.route('/radius/:zipcode/:distance').get(getBootcampsWithinRadius);
