@@ -15,7 +15,6 @@ import { checkOwnerBeforeDbOperation } from '../helpers/check-owner-before-db-op
 export const createCourse = asyncHandler(
   async (req: ReqWithUser, res: Response, next: NextFunction) => {
     const bootcamp = await BootcampModel.findById(req.params.bootcampId);
-    console.log('bootcamp: ', bootcamp);
 
     if (!bootcamp) {
       return next(new ErrorResponse(`Bootcamp id ${req.params.bootcampId} does not exist`, 404));

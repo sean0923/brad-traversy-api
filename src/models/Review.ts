@@ -9,11 +9,10 @@ export interface Review extends mongoose.Document {
   createdAt: Date;
 }
 
-// model
-// export interface CourseModelInterface extends mongoose.Model<Course> {
-//   // here we decalre statics
-//   updateAverageCost: (bootcampId: string) => void;
-// }
+export interface ReviewModelInterface extends mongoose.Model<Review> {
+  // here we decalre statics
+  updateAverateRatingAtBootcamp: (bootcampId: mongoose.Types.ObjectId) => void;
+}
 
 const ReviewSchema = new mongoose.Schema<Review>({
   title: {
@@ -47,4 +46,31 @@ const ReviewSchema = new mongoose.Schema<Review>({
   },
 });
 
-export const ReviewModel = mongoose.model<Review>('Review', ReviewSchema);
+// Prevent user to submit more than one review per bootcamp
+ReviewSchema.index({ bootcampId: 1, userId: 1 }, { unique: true });
+
+ReviewSchema.statics.updateAverateRatingAtBootcamp = async function(bootcampId: string) {
+  const arrOfObj: { _id: string; averageRating: number }[] = await ReviewModel.aggregate([
+    { $match: { bootcampId: bootcampId } },
+    { $group: { _id: '$bootcampId', averageRating: { $avg: '$rating' } } },
+  ]);
+
+  try {
+    const averageRating = arrOfObj[0].averageRating;
+    await this.model('Bootcamp').findByIdAndUpdate(bootcampId, { averageRating }, { new: true });
+  } catch (error) {
+    console.log('error: ', error);
+  }
+};
+
+ReviewSchema.post<Review>('save', async function(doc, next) {
+  ReviewModel.updateAverateRatingAtBootcamp(doc.bootcampId);
+  next();
+});
+
+ReviewSchema.post<Review>('remove', async function(doc, next) {
+  ReviewModel.updateAverateRatingAtBootcamp(doc.bootcampId);
+  next();
+});
+
+export const ReviewModel = mongoose.model<Review, ReviewModelInterface>('Review', ReviewSchema);

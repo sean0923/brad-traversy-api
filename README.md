@@ -1,3 +1,16 @@
+## 63 ~ 65. CUD functionality for reviews
+
+63 - create review
+
+```ts
+// only one review is allowed for one bootcamp per  user
+// Prevent user to submit more than one review per bootcamp
+ReviewSchema.index({ bootcampId: 1, userId: 1 }, { unique: true });
+```
+
+64 - aggregate average rating
+65 - update and delete review
+
 ## 61. Seed reviews and get single review
 
 ```ts

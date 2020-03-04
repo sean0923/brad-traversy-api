@@ -10,7 +10,7 @@ interface MustHaveKey_userId {
 
 export function checkOwnerBeforeDbOperation(
   instance: MustHaveKey_userId | null,
-  instanceName: 'bootcamp' | 'course',
+  instanceName: 'bootcamp' | 'course' | 'review',
   dbOperationName: 'update' | 'upload photo' | 'delete' | 'create',
   req: ReqWithUser,
   next: NextFunction

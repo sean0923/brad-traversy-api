@@ -58,6 +58,7 @@ export const authorize = (...roles: string[]) => (
   res: Response,
   next: NextFunction
 ) => {
+  console.log('req.user.role: ', req.user.role);
   const isAuthorized = roles.includes(req.user.role);
 
   if (!isAuthorized) {
