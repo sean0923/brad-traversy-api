@@ -81,9 +81,12 @@ export const updateReview = asyncHandler(
 
     checkOwnerBeforeDbOperation(review, 'review', 'update', req, next);
 
-    await review.update(req.body);
+    const updatedReview = await ReviewModel.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
-    res.status(200).json({ sucess: true, data: review });
+    res.status(200).json({ sucess: true, data: updatedReview });
   }
 );
 
