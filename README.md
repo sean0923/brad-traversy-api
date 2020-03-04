@@ -1,3 +1,28 @@
+## 66. Logout to Clear Token Cookie
+
+- src/middlewares/auth
+```ts
+// * if Bearere token does not exist then set token from cookie.token
+if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+  token = req.headers.authorization.split(' ')[1];
+} else if (req.cookies.token) {
+  token = req.cookies.token;
+}
+```
+
+- src/controllers/auth
+
+```ts
+// * (Sign Out)
+// @ desc     signout
+// @ route    GET /api/v1/auth/signout
+// @ access   Public
+export const signout = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  res.cookie('token', 'nono', { expires: new Date(Date.now() + 10 * 60 * 1000), httpOnly: true });
+  res.status(200).send({ success: true, data: {} });
+});
+```
+
 ## 63 ~ 65. CUD functionality for reviews
 
 63 - create review

@@ -15,10 +15,12 @@ export interface ReqWithUser extends Request {
 const getToken = (req: Request) => {
   let token: string | undefined = undefined;
 
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-    token = req.headers.authorization.split(' ')[1];
-  }
+  // * Bearer token only
+  // if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+  //   token = req.headers.authorization.split(' ')[1];
+  // }
 
+  // * if Bearere token does not exist then set token from cookie.token
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1];
   } else if (req.cookies.token) {
