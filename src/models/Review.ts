@@ -28,7 +28,7 @@ const ReviewSchema = new mongoose.Schema<Review>({
   rating: {
     type: Number,
     min: 1,
-    max: 5,
+    max: 10,
     required: [true, 'Please add rating'],
   },
   bootcampId: {

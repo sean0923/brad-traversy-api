@@ -1,13 +1,12 @@
 import { NextFunction, Response, Request } from 'express';
-import { CourseModel } from '../models/Course';
 import { asyncHandler } from '../middlewares/async-handler';
 import { ErrorResponse } from '../helpers/ErrorResponse';
 import { ResWithAdvanceResults } from '../middlewares/advanced-results';
 import { ReviewModel } from '../models/Review';
 
 // * R (all)
-// @ desc     Get all courses
-// @ route    GET /api/v1/courses
+// @ desc     Get all reviews
+// @ route    GET /api/v1/reviews
 // @ route    GET /api/v1/:bootcampId/reviews
 // @ access   Public
 export const getReviews = asyncHandler(
@@ -28,18 +27,18 @@ export const getReviews = asyncHandler(
 );
 
 // * R (single)
-// @ desc     Get single course
-// @ route    GET /api/v1/courses/:id
+// @ desc     Get a single review
+// @ route    GET /api/v1/reivews/:id
 // @ access   Public
-export const getCourse = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  let query = CourseModel.findById(req.params.id);
+export const getReview = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  let query = ReviewModel.findById(req.params.id);
 
   query.populate('bootcampId', 'name careers');
 
-  const singleCourse = await query.exec();
-  if (!singleCourse) {
-    return next(new ErrorResponse(`Course id ${req.params.id} does not exist`, 404));
+  const singleReview = await query.exec();
+  if (!singleReview) {
+    return next(new ErrorResponse(`Review id ${req.params.id} does not exist`, 404));
   }
 
-  res.status(200).json({ sucess: true, data: singleCourse });
+  res.status(200).json({ sucess: true, data: singleReview });
 });

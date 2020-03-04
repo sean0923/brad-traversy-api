@@ -1,7 +1,27 @@
+## 61. Seed reviews and get single review
+
+```ts
+// * R (single)
+// @ desc     Get a single review
+// @ route    GET /api/v1/reivews/:id
+// @ access   Public
+export const getReview = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  let query = ReviewModel.findById(req.params.id);
+
+  query.populate('bootcampId', 'name careers');
+
+  const singleReview = await query.exec();
+  if (!singleReview) {
+    return next(new ErrorResponse(`Review id ${req.params.id} does not exist`, 404));
+  }
+
+  res.status(200).json({ sucess: true, data: singleReview });
+});
+```
+
 ## 60. ReviewModel and get reviews
 
 - similar to get courses
-
 
 ## 59. CRUD users API for admin users
 

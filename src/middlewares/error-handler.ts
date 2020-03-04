@@ -1,14 +1,19 @@
-import { Response } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import { ErrorResponse } from '../helpers/ErrorResponse';
 import { Error } from 'mongoose';
 // const errrr: Error.
 
-export const errorHandler = (err: ErrorResponse, req, res: Response, next) => {
+export const errorHandler = (
+  err: ErrorResponse,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   let tempErr = new ErrorResponse(err.message, err.statusCode);
 
   // MongoDB bad _id format
   if (err.name === 'CastError') {
-    tempErr = new ErrorResponse(`Bootcamp not found with id of ${err.value}`, 404);
+    tempErr = new ErrorResponse(`Resource not found with id of ${err.value}`, 404);
   }
 
   // duplicate key error
