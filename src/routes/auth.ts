@@ -8,6 +8,7 @@ import {
   resetPassword,
   updateMyInfo,
   updateMyPassword,
+  signout,
 } from '../controllers/auth';
 
 import { protect } from '../middlewares/auth';
@@ -19,6 +20,8 @@ authRouter.route('/signup-new-user').post(signupNewUser);
 
 // api/v1/auth/signup
 authRouter.route('/signin').post(signin);
+
+authRouter.route('/signout').get(signout);
 
 // api/v1/auth/signup
 authRouter.route('/forgot-password').post(forgotPassword);

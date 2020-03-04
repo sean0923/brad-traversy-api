@@ -43,6 +43,15 @@ export const signin = asyncHandler(async (req: Request, res: Response, next: Nex
   resSendJwt(res, user);
 });
 
+// * (Sign Out)
+// @ desc     signout
+// @ route    GET /api/v1/auth/signout
+// @ access   Public
+export const signout = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  res.cookie('token', 'nono', { expires: new Date(Date.now() + 10 * 60 * 1000), httpOnly: true });
+  res.status(200).send({ success: true, data: {} });
+});
+
 // * C (C for creating resetPasswordToken) (ForgotPassword)
 // @ desc     forgot password
 // @ route    POST /api/v1/auth/forgot-password
