@@ -16,16 +16,16 @@ const getToken = (req: Request) => {
   let token: string | undefined = undefined;
 
   // * Bearer token only
-  // if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-  //   token = req.headers.authorization.split(' ')[1];
-  // }
-
-  // * if Bearere token does not exist then set token from cookie.token
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1];
-  } else if (req.cookies.token) {
-    token = req.cookies.token;
   }
+
+  // // * if Bearere token does not exist then set token from cookie.token
+  // if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+  //   token = req.headers.authorization.split(' ')[1];
+  // } else if (req.cookies.token) {
+  //   token = req.cookies.token;
+  // }
 
   return token;
 };

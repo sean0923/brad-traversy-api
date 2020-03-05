@@ -6,6 +6,7 @@ import { UserModel } from '../models/User';
 import { resSendJwt } from './auth.utils';
 import { ReqWithUser } from '../middlewares/auth';
 import { sendEmail } from '../helpers/send-email';
+import mongoSanitize from 'express-mongo-sanitize';
 import crypto from 'crypto';
 
 // * C (Sign Up)
@@ -27,6 +28,10 @@ export const signupNewUser = asyncHandler(
 // @ access   Public
 export const signin = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
+  // req.body = mongoSanitize.sanitize(req.body);
+  console.log('req.body: ', req.body);
+  // const hasProhibited = mongoSanitize.has(req.body);
+  // console.log('hasProhibited: ', hasProhibited);
 
   const user = await UserModel.findOne({ email }).select('password'); // select password because in schema level select password false
 

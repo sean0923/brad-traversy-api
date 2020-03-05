@@ -1,6 +1,29 @@
+## 67. Prevent NOSQL injection and sanitize data
+
+- currently below img works
+  <img src="./assets/possible-db-injection.png">
+
+- use express-mongo-sanitize so that \$gt and etc will not return data
+
+npm install express-mongo-sanitize
+
+!!!!!!!!!!!!!!!!!!!!!!!
+
+- MONGO SANITIZE NEED TO AFTER `express.json()` !!!
+
+```ts
+app.use(express.json());
+app.use(mongoSanitize());
+```
+
+```ts
+app.use(mongoSanitize());
+```
+
 ## 66. Logout to Clear Token Cookie
 
 - src/middlewares/auth
+
 ```ts
 // * if Bearere token does not exist then set token from cookie.token
 if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {

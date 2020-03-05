@@ -4,7 +4,9 @@ import morgan from 'morgan';
 import expressFileupload from 'express-fileupload';
 import cookieParser from 'cookie-parser';
 import path from 'path';
+import mongoSanitize from 'express-mongo-sanitize';
 // import moduleName from './public/uploads'
+// const mongoSanitize = require('express-mongo-sanitize');
 
 import 'colors';
 
@@ -42,7 +44,10 @@ app.use(express.static(path.resolve(__dirname + '/./public')));
 app.use(expressFileupload());
 app.use(cookieParser());
 
+// ! MONGO SANITIZE NEED TO AFTER `express.json()` !!!
 app.use(express.json());
+app.use(mongoSanitize());
+// ! -------------------------------------------------
 app.use('/api/v1/bootcamps', bootcampsRouter);
 app.use('/api/v1/courses', coursesRouter);
 app.use('/api/v1/auth', authRouter);

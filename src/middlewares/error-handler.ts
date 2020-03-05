@@ -13,7 +13,7 @@ export const errorHandler = (
 
   // MongoDB bad _id format
   if (err.name === 'CastError') {
-    tempErr = new ErrorResponse(`Resource not found with id of ${err.value}`, 404);
+    tempErr = new ErrorResponse(`Resource not found.`, 404);
   }
 
   // duplicate key error
