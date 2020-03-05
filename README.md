@@ -1,3 +1,19 @@
+## 68. Add Security Headers and XSS Protection
+
+- npm install helmet
+  (for security headers)
+
+- npm install xss-clean
+  (<script></script> --> &lt;script>&lt;/script>)
+
+```ts
+// add security headers
+app.use(helmet());
+
+// add xss proection (<script></script> --> &lt;script>&lt;/script>)
+app.use(xss());
+```
+
 ## 67. Prevent NOSQL injection and sanitize data
 
 - currently below img works
@@ -9,7 +25,7 @@ npm install express-mongo-sanitize
 
 !!!!!!!!!!!!!!!!!!!!!!!
 
-- MONGO SANITIZE NEED TO AFTER `express.json()` !!!
+- MONGO SANITIZE NEED TO BE AFTER `express.json()` !!!
 
 ```ts
 app.use(express.json());
