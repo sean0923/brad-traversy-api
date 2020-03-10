@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "tsc && cp -r src/public/ dist/public/ ",
     "webpack-watch": "webpack --watch --mode development",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"tsc --watch\" \"nodemon dist/\"",
     "custom": "tsc --watch",
-    "start": "NODE_ENV=production node dist/bundle.js"
+    "start": "NODE_ENV=production node dist/index.js"
   },
   "author": "",
   "license": "ISC",

@@ -1,3 +1,11 @@
+## 72. PM2 for ?process manager?
+
+In your server !!!
+
+```
+npm install pm2 -g
+```
+
 ## 71. Digital Ocean Setup (Create Droplet and Server Login)
 
 - add ssh key
