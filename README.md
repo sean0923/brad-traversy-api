@@ -1,3 +1,23 @@
+## 69. Rate limiting, hpp, and cors
+
+hpp - HTTP Parameter Pollution
+
+```ts
+// rate limit
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+
+app.use(limiter);
+
+// hpp
+app.use(hpp());
+
+// cors enable cuz public API
+app.use(cors());
+```
+
 ## 68. Add Security Headers and XSS Protection
 
 - npm install helmet

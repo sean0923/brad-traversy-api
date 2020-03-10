@@ -7,6 +7,10 @@ import path from 'path';
 import mongoSanitize from 'express-mongo-sanitize';
 import helmet from 'helmet';
 import xss from 'xss-clean';
+import rateLimit from 'express-rate-limit';
+import hpp from 'hpp';
+import cors from 'cors';
+
 // import moduleName from './public/uploads'
 // const mongoSanitize = require('express-mongo-sanitize');
 
@@ -59,6 +63,20 @@ app.use(helmet());
 
 // add xss proection (<script></script> --> &lt;script>&lt;/script>)
 app.use(xss());
+
+// rate limit
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+
+app.use(limiter);
+
+// hpp
+app.use(hpp());
+
+// cors enable cuz public API
+app.use(cors());
 
 // routes
 app.use('/api/v1/bootcamps', bootcampsRouter);
