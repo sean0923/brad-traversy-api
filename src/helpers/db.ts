@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 export const connectDB = async () => {
-  const conn = await mongoose.connect(process.env.MONGO_URI as string, {
+  const conn = await mongoose.connect(process.env.ATLAS_MONGO_URI as string, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,

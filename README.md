@@ -1,4 +1,16 @@
-## Documentation with Postman & DocGen
+## 71. Digital Ocean Setup (Create Droplet and Server Login)
+
+- add ssh key
+- ssh root@<ip address>
+
+---
+
+if `Permission denied (publickey).`
+then
+
+- ssh-add ~/.ssh/id_rsa_digital_ocean
+
+## 70. Documentation with Postman & DocGen
 
 Mac
 
