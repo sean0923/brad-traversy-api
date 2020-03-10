@@ -1,3 +1,22 @@
+## Documentation with Postman & DocGen
+
+Mac
+
+```
+brew tap thedevsaddam/cli https://github.com/thedevsaddam/homebrew-cli.git
+brew install docgen
+
+# update
+
+brew upgrade docgen
+```
+
+To make HTML documentation use
+
+```
+docgen build -i input-postman-collection.json -o index.html
+```
+
 ## 69. Rate limiting, hpp, and cors
 
 hpp - HTTP Parameter Pollution
